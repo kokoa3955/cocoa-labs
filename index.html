@@ -3,460 +3,569 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cocoa Labs | Micro-Tools & Software Studio</title>
+  <title>ContextShelf - Web Quote & Research Hub</title>
+  <meta name="description" content="Webの有益な引用・調査データを1秒で保存・整理・AI要約。研究者・エンジニア・リサーチャーのための軽量Chrome拡張機能。">
   <style>
     :root {
-      --bg: #0b0f19;
-      --surface: #111827;
-      --card: #1f2937;
-      --text: #f9fafb;
-      --text-muted: #9ca3af;
-      --primary: #38bdf8;
-      --primary-hover: #0ea5e9;
-      --accent: #fbbf24;
-      --border: #374151;
-      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --bg: #ffffff;
+      --bg-alt: #f8fafc;
+      --border: #e2e8f0;
+      --card-bg: #ffffff;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body { font-family: var(--font); background-color: var(--bg); color: var(--text); line-height: 1.6; }
-    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
 
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ナビゲーション */
     nav {
-      position: sticky;
-      top: 0;
-      background: rgba(11, 15, 25, 0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      z-index: 1000;
-    }
-    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: 64px;
     }
-    .brand { font-size: 18px; font-weight: 800; color: var(--text); text-decoration: none; display: flex; align-items: center; gap: 8px; }
-    .brand span { color: var(--primary); }
 
-    .nav-right { display: flex; align-items: center; gap: 20px; }
-    .nav-links { display: flex; gap: 24px; list-style: none; }
-    .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
-    .nav-links a:hover { color: var(--primary); }
-
-    .lang-btn {
-      background: var(--card);
-      border: 1px solid var(--border);
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 800;
       color: var(--text);
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 12px;
-      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .hamburger {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 8px;
-      flex-direction: column;
-      gap: 5px;
-    }
-    .hamburger span {
-      display: block;
-      width: 22px;
-      height: 2px;
-      background-color: var(--text);
-      transition: 0.3s;
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      align-items: center;
     }
 
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: 64px;
-      left: 0;
-      width: 100%;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 24px;
-      flex-direction: column;
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .btn-cta-nav {
+      background-color: var(--primary);
+      color: #ffffff !important;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: background 0.15s !important;
+    }
+
+    .btn-cta-nav:hover {
+      background-color: var(--primary-hover) !important;
+    }
+
+    /* ヒーローセクション */
+    .hero {
+      max-width: 900px;
+      margin: 60px auto 40px;
+      text-align: center;
+      padding: 0 24px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background-color: #e0e7ff;
+      color: var(--primary);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto 32px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
       gap: 16px;
-      z-index: 999;
+      flex-wrap: wrap;
     }
-    .mobile-menu.active { display: flex; }
-    .mobile-menu a { color: var(--text); text-decoration: none; font-size: 16px; font-weight: 500; }
 
-    header { padding: 90px 0 60px; text-align: center; border-bottom: 1px solid var(--border); }
-    .badge { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--primary); background: rgba(56, 189, 248, 0.1); padding: 4px 12px; border-radius: 999px; margin-bottom: 16px; border: 1px solid rgba(56, 189, 248, 0.2); }
-    h1 { font-size: 38px; font-weight: 800; margin-bottom: 16px; line-height: 1.2; }
-    .hero-p { color: var(--text-muted); font-size: 16px; max-width: 600px; margin: 0 auto; }
+    .btn-primary {
+      background-color: var(--primary);
+      color: #ffffff;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 1.05rem;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
+      transition: all 0.15s ease;
+    }
 
-    section { padding: 70px 0; border-bottom: 1px solid var(--border); }
-    h2 { font-size: 24px; margin-bottom: 32px; display: flex; align-items: center; gap: 10px; }
-    h2::before { content: ""; display: block; width: 4px; height: 20px; background: var(--primary); border-radius: 2px; }
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-1px);
+    }
 
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; }
-    .card-pro { border-color: var(--primary); }
-    .card-premium { border-color: var(--accent); }
+    .btn-secondary {
+      background-color: #f1f5f9;
+      color: var(--text);
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 1.05rem;
+      transition: background 0.15s ease;
+    }
 
-    .tag { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; }
-    .card-title { font-size: 18px; margin-bottom: 10px; }
-    .card-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
-    .check-list { list-style: none; font-size: 13px; margin-bottom: 20px; }
-    .check-list li { margin-bottom: 8px; padding-left: 18px; position: relative; }
-    .check-list li::before { content: "✓"; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
-    
-    .price-box { margin: 12px 0; min-height: 58px; }
-    .price-num { font-size: 24px; font-weight: 800; }
-    .price-sub { font-size: 13px; color: var(--text-muted); font-weight: normal; }
-    .price-note { font-size: 11px; color: var(--accent); display: block; margin-top: 4px; line-height: 1.3; }
-    
-    .btn { display: inline-block; text-align: center; background: var(--primary); color: #0b0f19; font-weight: 700; padding: 10px 18px; border-radius: 6px; text-decoration: none; font-size: 13px; cursor: pointer; border: none; }
-    .btn:hover { background: var(--primary-hover); }
-    .btn-premium { background: var(--accent); color: #0b0f19; }
-    .btn-premium:hover { background: #d97706; }
-    .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
-    .btn-secondary:hover { background: var(--card); }
+    .btn-secondary:hover {
+      background-color: #e2e8f0;
+    }
 
-    table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--card); border-radius: 8px; border: 1px solid var(--border); }
-    th, td { padding: 14px 16px; border-bottom: 1px solid var(--border); text-align: left; }
-    th { width: 28%; color: var(--text-muted); background: rgba(0,0,0,0.2); font-weight: 600; }
-    tr:last-child th, tr:last-child td { border-bottom: none; }
+    /* デモプレビュー枠 */
+    .preview-box {
+      max-width: 850px;
+      margin: 50px auto 80px;
+      padding: 0 24px;
+    }
 
-    footer { padding: 40px 0; text-align: center; font-size: 12px; color: var(--text-muted); }
+    .preview-window {
+      background-color: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+    }
 
-    @media (max-width: 768px) {
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-      h1 { font-size: 28px; }
-      th { width: 35%; }
+    .window-header {
+      background-color: #f8fafc;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .dot-red { background: #ef4444; }
+    .dot-yellow { background: #f59e0b; }
+    .dot-green { background: #10b981; }
+
+    .window-body {
+      padding: 24px;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .demo-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .demo-quote {
+      background-color: #f8fafc;
+      border-left: 3px solid var(--primary);
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .demo-summary {
+      background-color: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #15803d;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    .demo-note {
+      background-color: #fffbeb;
+      border: 1px dashed #fde68a;
+      color: #92400e;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+
+    /* フィーチャー一覧 */
+    .features {
+      background-color: var(--bg-alt);
+      padding: 80px 24px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 650px;
+      margin: 0 auto 50px;
+    }
+
+    .section-header h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+    }
+
+    .feature-grid {
+      max-width: 1050px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .feature-icon {
+      font-size: 1.8rem;
+      margin-bottom: 12px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* 料金表 */
+    .pricing {
+      max-width: 1000px;
+      margin: 80px auto;
+      padding: 0 24px;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .pricing-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .pricing-card.featured {
+      border: 2px solid var(--primary);
+      box-shadow: 0 8px 24px rgba(79, 70, 229, 0.12);
+    }
+
+    .plan-badge-popular {
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      background-color: var(--primary);
+      color: #ffffff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 12px;
+    }
+
+    .plan-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .plan-price {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .plan-price span {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-weight: normal;
+    }
+
+    .plan-features-list {
+      list-style: none;
+      margin: 20px 0 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.95rem;
+      flex: 1;
+    }
+
+    .plan-features-list li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-plan {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      text-align: center;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: all 0.15s ease;
+    }
+
+    .btn-plan-free {
+      background: #f1f5f9;
+      color: var(--text);
+    }
+    .btn-plan-free:hover { background: #e2e8f0; }
+
+    .btn-plan-pro {
+      background: #e0e7ff;
+      color: var(--primary);
+    }
+    .btn-plan-pro:hover { background: #c7d2fe; }
+
+    .btn-plan-premium {
+      background: var(--primary);
+      color: #ffffff;
+    }
+    .btn-plan-premium:hover { background: var(--primary-hover); }
+
+    /* フッター */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 2.1rem; }
+      .pricing-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
+  <!-- ナビゲーション -->
   <nav>
-    <div class="container nav-container">
-      <a href="#" class="brand">Cocoa<span>Labs</span></a>
-      <div class="nav-right">
-        <ul class="nav-links">
-          <li><a href="#products" data-i18n="nav_products">プロダクト</a></li>
-          <li><a href="#pricing" data-i18n="nav_pricing">料金プラン</a></li>
-          <li><a href="#about" data-i18n="nav_about">概要・開発者</a></li>
-          <li><a href="#legal" data-i18n="nav_legal">特定商取引法</a></li>
-        </ul>
-        <button class="lang-btn" id="langToggle">EN / JA</button>
-        <button class="hamburger" id="menuToggle" aria-label="Menu">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
+    <div class="logo">
+      📦 ContextShelf
+    </div>
+    <div class="nav-links">
+      <a href="#features">機能</a>
+      <a href="#pricing">料金プラン</a>
+      <a href="https://chromewebstore.google.com" target="_blank" class="btn-cta-nav">Chromeに追加</a>
     </div>
   </nav>
 
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#products" class="mobile-link" data-i18n="nav_products">プロダクト</a>
-    <a href="#pricing" class="mobile-link" data-i18n="nav_pricing">料金プラン</a>
-    <a href="#about" class="mobile-link" data-i18n="nav_about">概要・開発者</a>
-    <a href="#legal" class="mobile-link" data-i18n="nav_legal">特定商取引法</a>
-  </div>
-
-  <header>
-    <div class="container">
-      <span class="badge" data-i18n="hero_badge">Software & Tool Studio</span>
-      <h1 data-i18n="hero_title">日常の作業を自動化・効率化する<br>マイクロツールスタジオ</h1>
-      <p class="hero-p" data-i18n="hero_desc">Cocoa Labs は、エンジニアリングとクリエイティビティを融合し、高機能なブラウザ拡張機能およびSaaSを開発・提供しています。</p>
+  <!-- ヒーロー -->
+  <header class="hero">
+    <div class="hero-badge">⚡ リサーチ・論文・記事執筆の作業効率を最大化</div>
+    <h1>Web上の知識を、<span>一瞬で資産に変える</span></h1>
+    <p>
+      テキスト選択＆ショートカット（Alt+S）で即保存。元の位置への正確なピンバック、Gemini 3.5 Flash-Liteによる高速要約、一言メモとMarkdownエクスポートをすべてブラウザ完結で。
+    </p>
+    <div class="hero-buttons">
+      <a href="https://chromewebstore.google.com" target="_blank" class="btn-primary">Chromeに追加（無料）</a>
+      <a href="#features" class="btn-secondary">主な機能を見る</a>
     </div>
   </header>
 
-  <main class="container">
-    <!-- Products -->
-    <section id="products">
-      <h2 data-i18n="sec_products">Products</h2>
-      <div class="grid-2">
-        <div class="card card-pro">
-          <div>
-            <div class="tag">Chrome Extension</div>
-            <h3 class="card-title">Notion Smart Clipper</h3>
-            <p class="card-desc" data-i18n="p1_desc">WebページやYouTube動画のメタデータ（タイトル、チャンネル名、秒数付き再生リンク等）を構造化してNotion DBへ即座に送信・保存。</p>
-            <ul class="check-list">
-              <li data-i18n="p1_f1">YouTubeメタデータの多重フォールバック抽出</li>
-              <li data-i18n="p1_f2">タイムスタンプ付きURLの自動生成</li>
-              <li data-i18n="p1_f3">ローカルストレージ暗号保持によるセキュア設計</li>
-            </ul>
+  <!-- デモプレビュー -->
+  <section class="preview-box">
+    <div class="preview-window">
+      <div class="window-header">
+        <div class="dot dot-red"></div>
+        <div class="dot dot-yellow"></div>
+        <div class="dot dot-green"></div>
+      </div>
+      <div class="window-body">
+        <div class="demo-card">
+          <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 6px;">📁 開発ナレッジ &bull; 2026/08/23</div>
+          <div class="demo-quote">
+            「DOM非破壊設計により、Webページの構造を壊すことなくハイライトと位置特定を両立する。」
           </div>
-          <div>
-            <a href="#pricing" class="btn" data-i18n="btn_view_plan">プランを見る</a>
+          <div class="demo-summary">
+            ✨ <b>Gemini要約</b>: DOM非破壊設計でWebページの表示崩れを防ぎ、安全な引用管理を実現。
           </div>
-        </div>
-
-        <div class="card">
-          <div>
-            <div class="tag">Coming Soon</div>
-            <h3 class="card-title">Automation & Productivity Suite</h3>
-            <p class="card-desc" data-i18n="p2_desc">ECプラットフォーム横断データ分析ツールおよびブラウザ自動化拡張機能を開発中。</p>
-            <ul class="check-list">
-              <li data-i18n="p2_f1">API連携データスクレイピング</li>
-              <li data-i18n="p2_f2">マルチプラットフォーム同期機能</li>
-            </ul>
-          </div>
-          <div>
-            <button class="btn btn-secondary" style="width: 100%;" disabled data-i18n="btn_in_dev">開発中</button>
+          <div class="demo-note">
+            💭 <b>Note</b>: 次期アーキテクチャの参考にする
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- Pricing -->
-    <section id="pricing">
-      <h2 data-i18n="sec_pricing">Pricing Plans</h2>
-      <div class="grid-3">
-        <!-- Free -->
-        <div class="card">
-          <div>
-            <h3 class="card-title" data-i18n="plan_free_title">Free プラン</h3>
-            <p class="card-desc" data-i18n="plan_free_desc">基本的な動作検証やライトユーザー向け。</p>
-            <div class="price-box" data-i18n="plan_free_price">
-              <span class="price-num">¥0</span> <span class="price-sub">/ 月</span>
-            </div>
-            <ul class="check-list">
-              <li data-i18n="plan_free_f1">月間 20 回までの保存</li>
-              <li data-i18n="plan_free_f2">全標準機能の利用</li>
-            </ul>
-          </div>
-          <button class="btn btn-secondary" style="width: 100%;" data-i18n="plan_free_btn">標準プラン</button>
-        </div>
-
-        <!-- Monthly PRO -->
-        <div class="card card-pro">
-          <div>
-            <div class="tag">Subscription</div>
-            <h3 class="card-title" data-i18n="plan_pro_title">PRO プラン（月額）</h3>
-            <p class="card-desc" data-i18n="plan_pro_desc">手軽にフル機能を試したい方向け。</p>
-            <div class="price-box" data-i18n="plan_pro_price">
-              <span class="price-num">約 ¥600</span> <span class="price-sub">/ 月</span>
-              <span class="price-note">※$4/月（1ドル＝150円換算時）</span>
-            </div>
-            <ul class="check-list">
-              <li data-i18n="plan_common_f1">無制限の保存実行</li>
-              <li data-i18n="plan_common_f2">優先バグ修正・アップデート</li>
-              <li data-i18n="plan_pro_f3">いつでも即時解約可能</li>
-            </ul>
-          </div>
-          <button class="btn" style="width: 100%;" data-i18n="plan_upgrade_btn">拡張機能内から購入</button>
-        </div>
-
-        <!-- Premium Lifetime -->
-        <div class="card card-premium">
-          <div>
-            <div class="tag" style="color: var(--accent);">Lifetime Access</div>
-            <h3 class="card-title" data-i18n="plan_premium_title">Premium プラン（買い切り）</h3>
-            <p class="card-desc" data-i18n="plan_premium_desc">一度の支払いで永久に利用可能な限定ライセンス。</p>
-            <div class="price-box" data-i18n="plan_premium_price">
-              <span class="price-num">約 ¥4,500</span> <span class="price-sub">/ 買い切り</span>
-              <span class="price-note">※$30一括決済（1ドル＝150円換算時）</span>
-            </div>
-            <ul class="check-list">
-              <li data-i18n="plan_common_f1">無制限の保存実行</li>
-              <li data-i18n="plan_common_f2">優先バグ修正・アップデート</li>
-              <li data-i18n="plan_premium_f3">永久利用可能（月額請求なし）</li>
-            </ul>
-          </div>
-          <button class="btn btn-premium" style="width: 100%;" data-i18n="plan_upgrade_btn">拡張機能内から購入</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- About -->
-    <section id="about">
-      <h2 data-i18n="sec_about">About & Philosophy</h2>
-      <div class="card">
-        <h3 style="margin-bottom: 12px;">Cocoa Labs</h3>
-        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 16px;" data-i18n="about_p1">
-          Cocoa Labs は、独立系エンジニアによって設立されたソフトウェア開発スタジオです。
-          ブラウザ環境における自動化、API統合、およびワークフロー効率化に特化し、最小限の操作で最大限の成果を生み出すツールを設計・提供しています。
-        </p>
-        <h4 style="font-size: 14px; margin-bottom: 8px;" data-i18n="about_tech_title">主要採用技術:</h4>
-        <p style="font-size: 13px; color: var(--text-muted);">
-          JavaScript (ES6+) / TypeScript / Chrome Extensions API (Manifest V3) / Notion API / Stripe & ExtensionPay / GitHub Pages
-        </p>
-      </div>
-    </section>
-
-    <!-- Legal -->
-    <section id="legal">
-      <h2 data-i18n="sec_legal">特定商取引法に基づく表記</h2>
-      <table>
-        <tr>
-          <th data-i18n="tbl_seller">販売事業者 / 屋号</th>
-          <td>Cocoa Labs（ココアラボ）</td>
-        </tr>
-        <tr>
-          <th data-i18n="tbl_owner">運営統括責任者</th>
-          <td data-i18n="tbl_owner_val">Cocoa Labs 運営責任者（請求があった場合は遅滞なく開示いたします）</td>
-        </tr>
-        <tr>
-          <th data-i18n="tbl_contact">連絡先メールアドレス</th>
-          <td>contact@cocoalabs.dev</td>
-        </tr>
-        <tr>
-          <th data-i18n="tbl_price">販売価格</th>
-          <td data-i18n="tbl_price_val">PROプラン: $4/月（約600円 ※1ドル150円換算時）、Premiumプラン: $30（約4,500円 ※1ドル150円換算時 / 一括払い）</td>
-        </tr>
-        <tr>
-          <th data-i18n="tbl_payment">支払方法・時期</th>
-          <td data-i18n="tbl_payment_val">クレジットカード（Stripe / ExtensionPay） / 登録時即時決済</td>
-        </tr>
-        <tr>
-          <th data-i18n="tbl_cancel">解約・返金ポリシー</th>
-          <td data-i18n="tbl_cancel_val">PROプランはいつでも拡張機能内より解約可能。Premiumプランは即時有効化されます。デジタルコンテンツの性質上、決済後の返金には応じかねます。</td>
-        </tr>
-      </table>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container">
-      &copy; 2026 Cocoa Labs. All rights reserved.
     </div>
+  </section>
+
+  <!-- 機能紹介 -->
+  <section id="features" class="features">
+    <div class="section-header">
+      <h2>ストレスゼロの研究・情報収集</h2>
+      <p>スクラップブックとAIの強みをブラウザサイドパネルに集約しました。</p>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>1秒で引用保存</h3>
+        <p>テキストを選択して <code>Alt + S</code> または右クリック。ページタイトル、URL、引用文をDOMを汚さずにサイドパネルへ即座に記録します。</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📍</div>
+        <h3>場所ピン＆ジャンプ</h3>
+        <p>「📍場所」を押すと元のWebページの該当位置まで自動スクロールし、淡い赤色マーカーでハイライト。引用の前後文脈をいつでも確認できます。</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">✨</div>
+        <h3>Gemini 3.5 Flash-Lite要約</h3>
+        <p>長文引用もワンクリックで2〜3行の箇条書きに要約。最速・低コストなFlash-Liteモデルにより、ストレスのない即時レスポンスを実現。</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">💭</div>
+        <h3>一言メモ＆直接編集</h3>
+        <p>引用ごとに「なぜ保存したか」の所感をメモ入力。さらに、引用テキストの不要な改行や余計な文字もその場で手軽に修正できます。</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📁</div>
+        <h3>フォルダ＆タグ分類</h3>
+        <p>プロジェクト別のフォルダ振り分けや、<code>#重要</code> などのタグ付けに対応。キーワード検索時はヒット箇所が黄色くハイライトされます。</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📥</div>
+        <h3>Markdown / JSON 出力</h3>
+        <p>蓄積した引用とメモを一括でMarkdown形式でダウンロード。Text Fragmentリンク付きで外部エディタへもシームレスに引き継げます。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 料金プラン -->
+  <section id="pricing" class="pricing">
+    <div class="section-header">
+      <h2>シンプルな料金プラン</h2>
+      <p>まずは無料でスタート。必要に応じてプロフェッショナル向けプランへ。</p>
+    </div>
+
+    <div class="pricing-grid">
+      <!-- Free -->
+      <div class="pricing-card">
+        <div class="plan-title">Free</div>
+        <div class="plan-price">$0 <span>/ 永久無料</span></div>
+        <ul class="plan-features-list">
+          <li>✔ 保存件数 <b>最大30件</b></li>
+          <li>✔ フォルダ作成 <b>2個まで</b></li>
+          <li>✔ 一言メモ＆テキスト編集</li>
+          <li>✔ タグ付け＆キーワード検索</li>
+          <li>✔ AI要約（1日3回まで）</li>
+        </ul>
+        <a href="https://chromewebstore.google.com" target="_blank" class="btn-plan btn-plan-free">無料で始める</a>
+      </div>
+
+      <!-- Pro (月額) -->
+      <div class="pricing-card">
+        <div class="plan-title">Pro</div>
+        <div class="plan-price">$4 <span>/ 月</span></div>
+        <ul class="plan-features-list">
+          <li>✔ 保存件数 <b>無制限</b></li>
+          <li>✔ フォルダ作成 <b>無制限</b></li>
+          <li>✔ ✨ <b>Gemini AI要約 無制限</b></li>
+          <li>✔ <b>Markdown / JSON 一括出力</b></li>
+          <li>✔ コピー時の署名削除</li>
+        </ul>
+        <a href="https://chromewebstore.google.com" target="_blank" class="btn-plan btn-plan-pro">Proを始める ($4/月)</a>
+      </div>
+
+      <!-- Premium Pro (買い切り) -->
+      <div class="pricing-card featured">
+        <div class="plan-badge-popular">一番人気・買い切り</div>
+        <div class="plan-title">Premium Pro</div>
+        <div class="plan-price">$30 <span>/ 一生使い放題</span></div>
+        <ul class="plan-features-list">
+          <li>✔ <b>Proと全く同じ全機能</b></li>
+          <li>✔ <b>追加の月額料金なし</b></li>
+          <li>✔ 今後のアップデートも永久有効</li>
+          <li>✔ 1回払いでずっと利用可能</li>
+          <li>✔ 優先サポート</li>
+        </ul>
+        <a href="https://chromewebstore.google.com" target="_blank" class="btn-plan btn-plan-premium">買い切りで購入 ($30)</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- フッター -->
+  <footer>
+    <p>&copy; 2026 ContextShelf. All rights reserved.</p>
   </footer>
 
-  <script>
-    const i18n = {
-      ja: {
-        nav_products: "プロダクト",
-        nav_pricing: "料金プラン",
-        nav_about: "概要・開発者",
-        nav_legal: "特定商取引法",
-        hero_badge: "Software & Tool Studio",
-        hero_title: "日常の作業を自動化・効率化する<br>マイクロツールスタジオ",
-        hero_desc: "Cocoa Labs は、エンジニアリングとクリエイティビティを融合し、高機能なブラウザ拡張機能およびSaaSを開発・提供しています。",
-        sec_products: "Products",
-        p1_desc: "WebページやYouTube動画のメタデータ（タイトル、チャンネル名、秒数付き再生リンク等）を構造化してNotion DBへ即座に送信・保存。",
-        p1_f1: "YouTubeメタデータの多重フォールバック抽出",
-        p1_f2: "タイムスタンプ付きURLの自動生成",
-        p1_f3: "ローカルストレージ暗号保持によるセキュア設計",
-        btn_view_plan: "プランを見る",
-        p2_desc: "ECプラットフォーム横断データ分析ツールおよびブラウザ自動化拡張機能を開発中。",
-        p2_f1: "API連携データスクレイピング",
-        p2_f2: "マルチプラットフォーム同期機能",
-        btn_in_dev: "開発中",
-        sec_pricing: "Pricing Plans",
-        plan_free_title: "Free プラン",
-        plan_free_desc: "基本的な動作検証やライトユーザー向け。",
-        plan_free_price: '<span class="price-num">¥0</span> <span class="price-sub">/ 月</span>',
-        plan_free_f1: "月間 20 回までの保存",
-        plan_free_f2: "全標準機能の利用",
-        plan_free_btn: "標準プラン",
-        plan_pro_title: "PRO プラン（月額）",
-        plan_pro_desc: "手軽にフル機能を試したい方向け。",
-        plan_pro_price: '<span class="price-num">約 ¥600</span> <span class="price-sub">/ 月</span><span class="price-note">※$4/月（1ドル＝150円換算時）</span>',
-        plan_common_f1: "無制限の保存実行",
-        plan_common_f2: "優先バグ修正・アップデート",
-        plan_pro_f3: "いつでも即時解約可能",
-        plan_premium_title: "Premium プラン（買い切り）",
-        plan_premium_desc: "一度の支払いで永久に利用可能な限定ライセンス。",
-        plan_premium_price: '<span class="price-num">約 ¥4,500</span> <span class="price-sub">/ 買い切り</span><span class="price-note">※$30一括決済（1ドル＝150円換算時）</span>',
-        plan_premium_f3: "永久利用可能（月額請求なし）",
-        plan_upgrade_btn: "拡張機能内から購入",
-        sec_about: "About & Philosophy",
-        about_p1: "Cocoa Labs は、独立系エンジニアによって設立されたソフトウェア開発スタジオです。ブラウザ環境における自動化、API統合、およびワークフロー効率化に特化し、最小限の操作で最大限の成果を生み出すツールを設計・提供しています。",
-        about_tech_title: "主要採用技術:",
-        sec_legal: "特定商取引法に基づく表記",
-        tbl_seller: "販売事業者 / 屋号",
-        tbl_owner: "運営統括責任者",
-        tbl_owner_val: "Cocoa Labs 運営責任者（請求があった場合は遅滞なく開示いたします）",
-        tbl_contact: "連絡先メールアドレス",
-        tbl_price: "販売価格",
-        tbl_price_val: "PROプラン: $4/月（約600円 ※1ドル150円換算時）、Premiumプラン: $30（約4,500円 ※1ドル150円換算時 / 一括払い）",
-        tbl_payment: "支払方法・時期",
-        tbl_payment_val: "クレジットカード（Stripe / ExtensionPay） / 登録時即時決済",
-        tbl_cancel: "解約・返金ポリシー",
-        tbl_cancel_val: "PROプランはいつでも拡張機能内より解約可能。Premiumプランは即時有効化されます。デジタルコンテンツの性質上、決済後の返金には応じかねます。"
-      },
-      en: {
-        nav_products: "Products",
-        nav_pricing: "Pricing",
-        nav_about: "About",
-        nav_legal: "Legal Notice",
-        hero_badge: "Software & Tool Studio",
-        hero_title: "Smart Micro-Tools to Automate<br>& Boost Your Productivity",
-        hero_desc: "Cocoa Labs develops high-performance browser extensions and SaaS tools designed to simplify your everyday digital workflow.",
-        sec_products: "Products",
-        p1_desc: "Extract structured metadata (titles, channel names, timestamped playback links) from Web & YouTube directly into Notion databases.",
-        p1_f1: "Multi-fallback YouTube metadata extraction",
-        p1_f2: "Automatic timestamped playback URL generation",
-        p1_f3: "Secure architecture keeping tokens strictly local",
-        btn_view_plan: "View Plans",
-        p2_desc: "Next-gen utility tools for e-commerce cross-platform analysis and browser workflow automation.",
-        p2_f1: "API-driven data scraping engines",
-        p2_f2: "Multi-platform sync capabilities",
-        btn_in_dev: "In Development",
-        sec_pricing: "Pricing Plans",
-        plan_free_title: "Free Plan",
-        plan_free_desc: "For basic evaluation and casual clipping.",
-        plan_free_price: '<span class="price-num">$0</span> <span class="price-sub">/ month</span>',
-        plan_free_f1: "Up to 20 saves per month",
-        plan_free_f2: "All core extraction features included",
-        plan_free_btn: "Default Plan",
-        plan_pro_title: "PRO Plan (Monthly)",
-        plan_pro_desc: "For flexible short-term full feature access.",
-        plan_pro_price: '<span class="price-num">$4</span> <span class="price-sub">/ month</span>',
-        plan_common_f1: "Unlimited saves & clipping",
-        plan_common_f2: "Priority bug fixes & updates",
-        plan_pro_f3: "Cancel anytime with one click",
-        plan_premium_title: "Premium Plan (Lifetime)",
-        plan_premium_desc: "Pay once, access all current and future features forever.",
-        plan_premium_price: '<span class="price-num">$30</span> <span class="price-sub">/ one-time</span>',
-        plan_premium_f3: "Lifetime access (No recurring fees)",
-        plan_upgrade_btn: "Purchase in Extension",
-        sec_about: "About & Philosophy",
-        about_p1: "Cocoa Labs is an independent software studio. We specialize in browser automation, API integrations, and workflow optimizations.",
-        about_tech_title: "Tech Stack:",
-        sec_legal: "Commercial Transaction Law",
-        tbl_seller: "Business Name",
-        tbl_owner: "Representative",
-        tbl_owner_val: "Cocoa Labs Management (Disclosed upon formal request)",
-        tbl_contact: "Contact Email",
-        tbl_price: "Pricing",
-        tbl_price_val: "PRO Plan: $4/month, Premium Plan: $30 (One-time payment)",
-        tbl_payment: "Payment Method",
-        tbl_payment_val: "Credit Card (Stripe / ExtensionPay) / Immediate",
-        tbl_cancel: "Cancellation Policy",
-        tbl_cancel_val: "PRO Plan subscriptions can be cancelled anytime. Premium Plan activates immediately. No refunds for digital products."
-      }
-    };
-
-    let currentLang = 'ja';
-
-    document.getElementById('langToggle').addEventListener('click', () => {
-      currentLang = currentLang === 'ja' ? 'en' : 'ja';
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (i18n[currentLang][key]) {
-          el.innerHTML = i18n[currentLang][key];
-        }
-      });
-      document.documentElement.lang = currentLang;
-    });
-
-    const menuToggle = document.getElementById('menuToggle');
-    const mobileMenu = document.getElementById('mobileMenu');
-
-    menuToggle.addEventListener('click', () => {
-      mobileMenu.classList.toggle('active');
-    });
-
-    document.querySelectorAll('.mobile-link').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.remove('active');
-      });
-    });
-  </script>
 </body>
 </html>
