@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>COCOA LABS - ContextShelf</title>
+  <title>COCOA LABS - Chrome Extensions & Micro Tools</title>
   <style>
     :root {
       --primary: #2563eb;
@@ -30,9 +30,10 @@
       line-height: 1.6;
       color: var(--text);
       background-color: var(--bg);
+      overflow-x: hidden;
     }
 
-    /* ナビゲーションバー */
+    /* 固定ナビゲーション */
     header.nav-header {
       position: sticky;
       top: 0;
@@ -67,7 +68,7 @@
       gap: 12px;
     }
 
-    /* 言語切り替えボタン */
+    /* 言語切り替えトグル */
     .lang-switcher {
       display: flex;
       background: #f1f5f9;
@@ -94,7 +95,7 @@
       box-shadow: 0 1px 2px rgba(0,0,0,0.06);
     }
 
-    /* 3本線ハンバーガーメニュー */
+    /* ハンバーガーメニュー */
     .hamburger-btn {
       background: none;
       border: none;
@@ -194,7 +195,62 @@
       margin: 0 auto;
     }
 
-    /* 料金カードグリッド */
+    /* プロダクト一覧（ラインナップ） */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.2rem;
+      margin: 1.5rem 0 2.5rem;
+    }
+
+    .product-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .product-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.6rem;
+    }
+
+    .product-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .badge-status {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .status-active { background: #dcfce7; color: #15803d; }
+    .status-dev { background: #fef9c3; color: #a16207; }
+    .status-plan { background: #f1f5f9; color: #64748b; }
+
+    .product-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .product-link {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    /* 料金カード */
     .pricing-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -213,6 +269,12 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.07);
     }
 
     .pricing-card.featured {
@@ -277,6 +339,11 @@
       font-size: 0.9rem;
       background: #f1f5f9;
       color: var(--text);
+      transition: background 0.15s ease;
+    }
+
+    .btn-plan:hover {
+      background: #e2e8f0;
     }
 
     .btn-plan.featured {
@@ -284,7 +351,11 @@
       color: #ffffff;
     }
 
-    /* 各セクション・テーブル */
+    .btn-plan.featured:hover {
+      background: var(--primary-hover);
+    }
+
+    /* 各セクション */
     .section {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -336,6 +407,23 @@
       font-size: 0.85rem;
       padding: 2rem 0 1rem;
     }
+
+    /* スクロール連動アニメーション */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .pricing-card.reveal:nth-child(1) { transition-delay: 0.05s; }
+    .pricing-card.reveal:nth-child(2) { transition-delay: 0.15s; }
+    .pricing-card.reveal:nth-child(3) { transition-delay: 0.25s; }
   </style>
 </head>
 <body>
@@ -364,6 +452,7 @@
   <div id="drawer-overlay" class="drawer-overlay"></div>
   <aside id="drawer-menu" class="drawer-menu">
     <div style="font-weight: 800; color: var(--text-muted); font-size: 0.85rem;">NAVIGATION</div>
+    <a href="#products" class="drawer-link" data-i18n="nav-products">プロダクト一覧</a>
     <a href="#pricing" class="drawer-link" data-i18n="nav-pricing">料金プラン</a>
     <a href="#features" class="drawer-link" data-i18n="nav-features">主な機能</a>
     <a href="#tokusho" class="drawer-link" data-i18n="nav-tokusho">特定商取引法に基づく表記</a>
@@ -373,16 +462,64 @@
 
   <div class="container">
     <!-- ヒーローヘッダー -->
-    <div class="hero-header">
-      <div class="hero-badge" data-i18n="badge-text">Chrome拡張機能</div>
-      <h1>ContextShelf</h1>
-      <p data-i18n="hero-desc">Web上の引用テキスト・調査メモを1秒でサイドパネルに保存。該当箇所への正確なピンバック、Gemini 3.5 Flash-Liteによる高速AI要約、Markdownエクスポートに対応。</p>
+    <div class="hero-header reveal">
+      <div class="hero-badge" data-i18n="badge-text">Indie Micro Studio</div>
+      <h1>COCOA LABS</h1>
+      <p data-i18n="hero-desc">ブラウザ作業の小さなストレスを解消する、軽量で直感的な拡張機能・Webツールを企画・開発しています。</p>
     </div>
 
-    <!-- 料金プラン -->
+    <!-- 開発プロダクト一覧 (Products & In-Development) -->
+    <section class="section reveal" id="products">
+      <h2 data-i18n="sec-products-title">開発プロダクト / 開発状況</h2>
+      <div class="products-grid">
+        <!-- 1. ContextShelf (公開中) -->
+        <div class="product-box">
+          <div>
+            <div class="product-top">
+              <span class="product-title">ContextShelf</span>
+              <span class="badge-status status-active" data-i18n="status-pub">公開中</span>
+            </div>
+            <p class="product-desc" data-i18n="p1-desc">
+              Webの文章を1秒で保存し、元の場所へのピンバックやGemini 3.5 Flash-LiteによるAI要約、Markdown出力ができるブラウザ拡張機能。
+            </p>
+          </div>
+          <a href="#pricing" class="product-link" data-i18n="p1-link">料金・詳細を見る &rarr;</a>
+        </div>
+
+        <!-- 2. Markdown QuickHub (開発中) -->
+        <div class="product-box">
+          <div>
+            <div class="product-top">
+              <span class="product-title">Markdown Hub</span>
+              <span class="badge-status status-dev" data-i18n="status-dev">開発中</span>
+            </div>
+            <p class="product-desc" data-i18n="p2-desc">
+              Web上の表や整形済みテキストをワンクリックで崩れのない綺麗なMarkdown構文に自動変換・クリップボードへ送る軽量ツール。
+            </p>
+          </div>
+          <span style="font-size:0.8rem; color:#a16207;" data-i18n="p2-sub">近日公開予定</span>
+        </div>
+
+        <!-- 3. Prompt Pocket (企画中) -->
+        <div class="product-box">
+          <div>
+            <div class="product-top">
+              <span class="product-title">Prompt Pocket</span>
+              <span class="badge-status status-plan" data-i18n="status-plan">企画中</span>
+            </div>
+            <p class="product-desc" data-i18n="p3-desc">
+              よく使うAIプロンプトをショートカットキーで瞬時に呼び出し、入力欄へ自動挿入できる定型文サポート拡張機能。
+            </p>
+          </div>
+          <span style="font-size:0.8rem; color:#64748b;" data-i18n="p3-sub">設計フェーズ</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 料金プラン (ContextShelf) -->
     <div class="pricing-grid" id="pricing">
       <!-- Free -->
-      <div class="pricing-card">
+      <div class="pricing-card reveal">
         <div>
           <h3>Free Plan</h3>
           <div class="price" id="p-free">¥0 <span>/ 月</span></div>
@@ -398,7 +535,7 @@
       </div>
 
       <!-- PRO -->
-      <div class="pricing-card">
+      <div class="pricing-card reveal">
         <div>
           <h3>PRO Plan</h3>
           <div class="price" id="p-pro">¥450 <span>/ 月</span></div>
@@ -414,7 +551,7 @@
       </div>
 
       <!-- Premium PRO (買い切り) -->
-      <div class="pricing-card featured">
+      <div class="pricing-card featured reveal">
         <div class="popular-tag" data-i18n="tag-popular">人気・買い切り</div>
         <div>
           <h3>Premium Plan</h3>
@@ -432,8 +569,8 @@
     </div>
 
     <!-- 主な機能の概要 -->
-    <section class="section" id="features">
-      <h2 data-i18n="sec-features-title">主な機能</h2>
+    <section class="section reveal" id="features">
+      <h2 data-i18n="sec-features-title">ContextShelf の主な機能</h2>
       <ul>
         <li data-i18n="feat-1"><strong>1秒で引用保存</strong>: Web上の文章を選択して <code>Alt + S</code> または右クリックするだけで、タイトルやURLと一緒にサイドパネルへ記録。</li>
         <li data-i18n="feat-2"><strong>場所ピン＆ジャンプ</strong>: 「📍場所」ボタンを押すと、元のWebページの引用位置まで自動スクロールし、赤色マーカーで示します。</li>
@@ -444,7 +581,7 @@
     </section>
 
     <!-- 特定商取引法に基づく表記 -->
-    <section class="section" id="tokusho">
+    <section class="section reveal" id="tokusho">
       <h2 data-i18n="sec-tokusho-title">特定商取引法に基づく表記</h2>
       <table>
         <tr>
@@ -490,7 +627,7 @@
     </section>
 
     <!-- 利用規約 -->
-    <section class="section" id="terms">
+    <section class="section reveal" id="terms">
       <h2 data-i18n="sec-terms-title">利用規約</h2>
       <ol>
         <li data-i18n="term-1"><strong>総則</strong>: 本規約は、COCOA LABSが提供するChrome拡張機能「ContextShelf」の利用条件を定めるものです。</li>
@@ -501,7 +638,7 @@
     </section>
 
     <!-- プライバシーポリシー -->
-    <section class="section" id="privacy">
+    <section class="section reveal" id="privacy">
       <h2 data-i18n="sec-privacy-title">プライバシーポリシー</h2>
       <p data-i18n="priv-intro">当方は、ユーザーのプライバシーを尊重し、個人情報の保護に努めます。</p>
       <br>
@@ -517,17 +654,28 @@
     </footer>
   </div>
 
-  <!-- 多言語切り替え & ドロワースクリプト -->
+  <!-- 多言語切り替え & スクリプト -->
   <script>
     const i18n = {
       ja: {
+        "nav-products": "プロダクト一覧",
         "nav-pricing": "料金プラン",
         "nav-features": "主な機能",
         "nav-tokusho": "特定商取引法に基づく表記",
         "nav-terms": "利用規約",
         "nav-privacy": "プライバシーポリシー",
-        "badge-text": "Chrome拡張機能",
-        "hero-desc": "Web上の引用テキスト・調査メモを1秒でサイドパネルに保存。該当箇所への正確なピンバック、Gemini 3.5 Flash-Liteによる高速AI要約、Markdownエクスポートに対応。",
+        "badge-text": "Indie Micro Studio",
+        "hero-desc": "ブラウザ作業の小さなストレスを解消する、軽量で直感的な拡張機能・Webツールを企画・開発しています。",
+        "sec-products-title": "開発プロダクト / 開発状況",
+        "status-pub": "公開中",
+        "status-dev": "開発中",
+        "status-plan": "企画中",
+        "p1-desc": "Webの文章を1秒で保存し、元の場所へのピンバックやGemini 3.5 Flash-LiteによるAI要約、Markdown出力ができるブラウザ拡張機能。",
+        "p1-link": "料金・詳細を見る &rarr;",
+        "p2-desc": "Web上の表や整形済みテキストをワンクリックで崩れのない綺麗なMarkdown構文に自動変換・クリップボードへ送る軽量ツール。",
+        "p2-sub": "近日公開予定",
+        "p3-desc": "よく使うAIプロンプトをショートカットキーで瞬時に呼び出し、入力欄へ自動挿入できる定型文サポート拡張機能。",
+        "p3-sub": "設計フェーズ",
         "p-free": "¥0 <span>/ 月</span>",
         "p-pro": "¥450 <span>/ 月</span>",
         "n-pro": "※ $3（1ドル=150円換算）",
@@ -549,7 +697,7 @@
         "f-prem-3": "✔ 今後の機能アップデートも無料",
         "f-prem-4": "✔ ずっと使い続けたい方向け",
         "btn-prem": "買い切りで購入",
-        "sec-features-title": "主な機能",
+        "sec-features-title": "ContextShelf の主な機能",
         "feat-1": "<strong>1秒で引用保存</strong>: Web上の文章を選択して <code>Alt + S</code> または右クリックするだけで、タイトルやURLと一緒にサイドパネルへ記録。",
         "feat-2": "<strong>場所ピン＆ジャンプ</strong>: 「📍場所」ボタンを押すと、元のWebページの引用位置まで自動スクロールし、赤色マーカーで示します。",
         "feat-3": "<strong>Gemini 3.5 Flash-Lite 高速要約</strong>: 長い引用もワンクリックで2〜3行の箇条書きに要約。",
@@ -585,13 +733,24 @@
         "priv-3": "<strong>利用目的</strong>: 拡張機能の機能提供、認証、および問い合わせ対応のみに利用します。"
       },
       en: {
+        "nav-products": "Products",
         "nav-pricing": "Pricing",
         "nav-features": "Features",
         "nav-tokusho": "Legal Notice",
         "nav-terms": "Terms of Service",
         "nav-privacy": "Privacy Policy",
-        "badge-text": "Chrome Extension",
-        "hero-desc": "Capture web quotes & research notes in 1 second. Features source pinpoint jump, Gemini 3.5 Flash-Lite AI summaries, and clean Markdown export directly in your sidebar.",
+        "badge-text": "Indie Micro Studio",
+        "hero-desc": "Crafting focused, lightweight browser extensions and micro-tools to eliminate friction from your daily digital workflows.",
+        "sec-products-title": "Products & Roadmap",
+        "status-pub": "Active",
+        "status-dev": "In Development",
+        "status-plan": "Planned",
+        "p1-desc": "Capture web quotes in 1s with source jump pin, Gemini 3.5 Flash-Lite AI summaries, and Markdown export.",
+        "p1-link": "View Pricing & Details &rarr;",
+        "p2-desc": "Instantly convert web tables and formatted text into clean, valid Markdown copied straight to your clipboard.",
+        "p2-sub": "Coming Soon",
+        "p3-desc": "A fast snippet manager to trigger and inject your favorite AI prompt templates with hotkeys.",
+        "p3-sub": "Design Phase",
         "p-free": "$0 <span>/ mo</span>",
         "p-pro": "$3 <span>/ mo</span>",
         "n-pro": "Billed monthly. Cancel anytime.",
@@ -613,7 +772,7 @@
         "f-prem-3": "✔ All future updates included",
         "f-prem-4": "✔ Best for long-term users",
         "btn-prem": "Get Lifetime ($20)",
-        "sec-features-title": "Features",
+        "sec-features-title": "ContextShelf Features",
         "feat-1": "<strong>1-Second Capture</strong>: Select text and press <code>Alt + S</code> or right-click to instantly save quotes with page title and URL.",
         "feat-2": "<strong>Location Pin & Jump</strong>: Click 'Location' to scroll right back to the quote on the original webpage with a clean red highlight.",
         "feat-3": "<strong>Gemini 3.5 Flash-Lite Summary</strong>: Summarize lengthy quotes into concise bullet points with one click.",
@@ -685,6 +844,22 @@
     hamburgerBtn.addEventListener('click', toggleDrawer);
     drawerOverlay.addEventListener('click', toggleDrawer);
     drawerLinks.forEach(link => link.addEventListener('click', toggleDrawer));
+
+    // スクロール検知オブザーバー
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {
+      root: null,
+      threshold: 0.1,
+      rootMargin: "0px 0px -40px 0px"
+    });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   </script>
 
 </body>
