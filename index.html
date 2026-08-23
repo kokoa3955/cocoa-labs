@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CocoaLab - Micro Tools & Digital Craftsmanship</title>
-  <meta name="description" content="CocoaLab - 日常のデジタル作業をより速く、シンプルにするプロダクトスタジオ。代表作「ContextShelf」を提供中。">
+  <title>CocoaLab - Webツール・拡張機能スタジオ</title>
+  <meta name="description" content="CocoaLab - 日常のちょっとした不便を解決するツールを作っています。">
   <style>
     :root {
       --primary: #4f46e5;
@@ -14,7 +14,6 @@
       --bg: #ffffff;
       --bg-alt: #f8fafc;
       --border: #e2e8f0;
-      --card-bg: #ffffff;
       --radius: 12px;
     }
 
@@ -35,7 +34,7 @@
       line-height: 1.6;
     }
 
-    /* ナビゲーションバー */
+    /* ヘッダー */
     header.site-header {
       position: sticky;
       top: 0;
@@ -48,14 +47,14 @@
     nav {
       max-width: 1080px;
       margin: 0 auto;
-      padding: 16px 24px;
+      padding: 14px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
     .brand-logo {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       font-weight: 800;
       color: var(--text);
       text-decoration: none;
@@ -70,17 +69,22 @@
       -webkit-text-fill-color: transparent;
     }
 
-    /* デスクトップメニュー */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
     .desktop-nav {
       display: flex;
-      gap: 24px;
+      gap: 20px;
       align-items: center;
     }
 
     .desktop-nav a {
       color: var(--text-muted);
       text-decoration: none;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 600;
       transition: color 0.15s;
     }
@@ -89,19 +93,48 @@
       color: var(--primary);
     }
 
+    /* 言語切り替えトグル */
+    .lang-switcher {
+      display: flex;
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2px;
+    }
+
+    .lang-btn {
+      background: none;
+      border: none;
+      padding: 4px 10px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 16px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+
+    .lang-btn.active {
+      background: #ffffff;
+      color: var(--text);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
     .btn-nav-cta {
       background-color: var(--primary);
       color: #ffffff !important;
-      padding: 8px 16px;
+      padding: 7px 14px;
       border-radius: 8px;
-      transition: background 0.15s !important;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-decoration: none;
     }
 
     .btn-nav-cta:hover {
-      background-color: var(--primary-hover) !important;
+      background-color: var(--primary-hover);
     }
 
-    /* ハンバーガーアイコン（3本線） */
+    /* ハンバーガーボタン */
     .hamburger-btn {
       display: none;
       background: none;
@@ -119,10 +152,9 @@
       height: 2px;
       background-color: var(--text);
       border-radius: 2px;
-      transition: all 0.25s ease;
     }
 
-    /* モバイルドロワーメニュー */
+    /* ドロワーメニュー */
     .drawer-overlay {
       position: fixed;
       inset: 0;
@@ -148,9 +180,9 @@
       padding: 70px 24px 30px;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
       box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
-      transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: right 0.3s ease;
       z-index: 1100;
     }
 
@@ -159,7 +191,7 @@
     }
 
     .drawer-menu a {
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 700;
       color: var(--text);
       text-decoration: none;
@@ -169,8 +201,8 @@
 
     /* ヒーローセクション */
     .hero {
-      max-width: 880px;
-      margin: 60px auto 30px;
+      max-width: 860px;
+      margin: 50px auto 30px;
       text-align: center;
       padding: 0 24px;
     }
@@ -183,17 +215,17 @@
       color: var(--primary);
       font-size: 0.85rem;
       font-weight: 700;
-      padding: 4px 14px;
+      padding: 4px 12px;
       border-radius: 20px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .hero h1 {
-      font-size: 3rem;
+      font-size: 2.8rem;
       font-weight: 800;
-      line-height: 1.2;
+      line-height: 1.25;
       letter-spacing: -0.02em;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .hero h1 span.gradient {
@@ -203,55 +235,52 @@
     }
 
     .hero p {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       color: var(--text-muted);
-      max-width: 640px;
-      margin: 0 auto 36px;
+      max-width: 620px;
+      margin: 0 auto 30px;
     }
 
     .hero-actions {
       display: flex;
       justify-content: center;
-      gap: 16px;
+      gap: 14px;
       flex-wrap: wrap;
     }
 
     .btn-main {
       background-color: var(--primary);
       color: #ffffff;
-      padding: 14px 28px;
+      padding: 12px 24px;
       border-radius: 8px;
       font-weight: 700;
-      font-size: 1.05rem;
+      font-size: 1rem;
       text-decoration: none;
-      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
-      transition: all 0.15s ease;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
     }
 
     .btn-main:hover {
       background-color: var(--primary-hover);
-      transform: translateY(-1px);
     }
 
     .btn-sub {
       background-color: #f1f5f9;
       color: var(--text);
-      padding: 14px 24px;
+      padding: 12px 20px;
       border-radius: 8px;
       font-weight: 700;
-      font-size: 1.05rem;
+      font-size: 1rem;
       text-decoration: none;
-      transition: background 0.15s ease;
     }
 
     .btn-sub:hover {
       background-color: #e2e8f0;
     }
 
-    /* デモプレビュー枠 */
+    /* デモプレビュー */
     .preview-container {
-      max-width: 820px;
-      margin: 40px auto 80px;
+      max-width: 780px;
+      margin: 30px auto 70px;
       padding: 0 24px;
     }
 
@@ -259,13 +288,13 @@
       background: #ffffff;
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.05);
       overflow: hidden;
     }
 
     .window-top {
       background: #f8fafc;
-      padding: 12px 16px;
+      padding: 10px 14px;
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -283,10 +312,10 @@
 
     .window-content {
       background: #f8fafc;
-      padding: 20px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .mock-card {
@@ -294,7 +323,6 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 14px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
     }
 
     .mock-quote {
@@ -302,7 +330,7 @@
       border-left: 3px solid var(--primary);
       padding: 8px 12px;
       font-size: 0.9rem;
-      border-radius: 0 6px 6px 0;
+      border-radius: 0 4px 4px 0;
       margin-bottom: 8px;
     }
 
@@ -325,9 +353,9 @@
       font-size: 0.85rem;
     }
 
-    /* 共通セクション */
+    /* セクション共通 */
     .section-wrap {
-      padding: 80px 24px;
+      padding: 70px 24px;
     }
 
     .bg-light {
@@ -338,50 +366,49 @@
 
     .section-title-wrap {
       text-align: center;
-      max-width: 650px;
-      margin: 0 auto 50px;
+      max-width: 600px;
+      margin: 0 auto 40px;
     }
 
     .section-title-wrap h2 {
-      font-size: 2rem;
+      font-size: 1.8rem;
       font-weight: 800;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
 
     .section-title-wrap p {
       color: var(--text-muted);
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
 
-    /* プロダクト一覧（Products） */
+    /* プロダクト一覧 */
     .products-grid {
-      max-width: 1050px;
+      max-width: 960px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
     }
 
     .product-card {
       background: #ffffff;
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 24px;
+      padding: 22px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
 
     .product-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .product-title {
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       font-weight: 800;
     }
 
@@ -396,56 +423,56 @@
 
     .product-desc {
       color: var(--text-muted);
-      font-size: 0.95rem;
-      margin-bottom: 20px;
+      font-size: 0.9rem;
+      margin-bottom: 18px;
     }
 
-    /* 機能グリッド */
+    /* 機能カード */
     .grid-3 {
-      max-width: 1050px;
+      max-width: 1000px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
     }
 
     .card-feature {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 24px;
+      padding: 20px;
     }
 
     .card-icon {
-      font-size: 2rem;
-      margin-bottom: 14px;
+      font-size: 1.6rem;
+      margin-bottom: 10px;
     }
 
     .card-feature h3 {
-      font-size: 1.15rem;
+      font-size: 1.05rem;
       font-weight: 700;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .card-feature p {
       color: var(--text-muted);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
     /* 料金表 */
     .pricing-grid {
-      max-width: 980px;
+      max-width: 920px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
     }
 
     .price-box {
       background: #ffffff;
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 30px;
+      padding: 26px;
       display: flex;
       flex-direction: column;
       position: relative;
@@ -453,64 +480,70 @@
 
     .price-box.popular {
       border: 2px solid var(--primary);
-      box-shadow: 0 8px 24px rgba(79, 70, 229, 0.12);
+      box-shadow: 0 6px 20px rgba(79, 70, 229, 0.1);
     }
 
     .popular-tag {
       position: absolute;
-      top: -12px;
-      right: 20px;
+      top: -11px;
+      right: 18px;
       background-color: var(--primary);
       color: #ffffff;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 700;
-      padding: 2px 10px;
-      border-radius: 12px;
+      padding: 2px 8px;
+      border-radius: 10px;
     }
 
     .plan-name {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-weight: 800;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .plan-amount {
-      font-size: 2.2rem;
+      font-size: 1.8rem;
       font-weight: 800;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
 
     .plan-amount span {
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       color: var(--text-muted);
       font-weight: normal;
     }
 
+    .plan-note {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-top: -8px;
+      margin-bottom: 12px;
+    }
+
     .plan-list {
       list-style: none;
-      margin: 20px 0 30px;
+      margin: 10px 0 24px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      font-size: 0.95rem;
+      gap: 8px;
+      font-size: 0.85rem;
       flex: 1;
     }
 
     .plan-list li {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .btn-plan {
       width: 100%;
-      padding: 12px;
+      padding: 10px;
       border-radius: 8px;
       font-weight: 700;
       text-align: center;
       text-decoration: none;
-      font-size: 1rem;
-      transition: all 0.15s ease;
+      font-size: 0.95rem;
     }
 
     .btn-plan-free { background: #f1f5f9; color: var(--text); }
@@ -522,111 +555,116 @@
     .btn-plan-premium { background: var(--primary); color: #ffffff; }
     .btn-plan-premium:hover { background: var(--primary-hover); }
 
-    /* CocoaLab Studio & Creator */
+    /* Aboutセクション */
     .about-section {
-      max-width: 800px;
+      max-width: 680px;
       margin: 0 auto;
       text-align: center;
     }
 
     .creator-avatar {
-      width: 80px;
-      height: 80px;
+      width: 64px;
+      height: 64px;
       border-radius: 50%;
       background: #e0e7ff;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 2.2rem;
-      margin-bottom: 16px;
+      font-size: 1.8rem;
+      margin-bottom: 12px;
     }
 
     .about-section h2 {
-      font-size: 2rem;
+      font-size: 1.6rem;
       font-weight: 800;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .creator-role {
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: var(--primary);
       font-weight: 700;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .about-section p {
       color: var(--text-muted);
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       line-height: 1.8;
-      margin-bottom: 24px;
     }
 
     /* フッター */
     footer {
       border-top: 1px solid var(--border);
-      padding: 40px 24px;
+      padding: 30px 24px;
       text-align: center;
       color: var(--text-muted);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
 
-    /* レスポンシブ */
     @media (max-width: 768px) {
       .desktop-nav { display: none; }
       .hamburger-btn { display: flex; }
-      .hero h1 { font-size: 2.2rem; }
+      .hero h1 { font-size: 2.1rem; }
       .pricing-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <!-- サイトヘッダー -->
+  <!-- ヘッダー -->
   <header class="site-header">
     <nav>
       <a href="#" class="brand-logo">
         ☕ <span>CocoaLab</span>
       </a>
 
-      <!-- デスクトップナビ -->
-      <div class="desktop-nav">
-        <a href="#products">プロダクト</a>
-        <a href="#features">ContextShelf機能</a>
-        <a href="#pricing">料金プラン</a>
-        <a href="#about">About Studio</a>
-        <a href="https://chromewebstore.google.com" target="_blank" class="btn-nav-cta">Chromeに追加</a>
-      </div>
+      <div class="nav-right">
+        <!-- 言語切り替え -->
+        <div class="lang-switcher">
+          <button id="lang-ja" class="lang-btn active">日本語</button>
+          <button id="lang-en" class="lang-btn">English</button>
+        </div>
 
-      <!-- モバイル用ハンバーガー（3本線） -->
-      <button id="hamburger-btn" class="hamburger-btn" aria-label="メニューを開く">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+        <div class="desktop-nav">
+          <a href="#products" data-i18n="nav-products">プロダクト</a>
+          <a href="#features" data-i18n="nav-features">機能</a>
+          <a href="#pricing" data-i18n="nav-pricing">料金</a>
+          <a href="#about" data-i18n="nav-about">開発者</a>
+          <a href="https://chromewebstore.google.com" target="_blank" class="btn-nav-cta" data-i18n="nav-cta">Chromeに追加</a>
+        </div>
+
+        <!-- ハンバーガーメニュー -->
+        <button id="hamburger-btn" class="hamburger-btn" aria-label="Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
     </nav>
   </header>
 
-  <!-- ドロワーメニュー -->
+  <!-- モバイル用ドロワー -->
   <div id="drawer-overlay" class="drawer-overlay"></div>
   <aside id="drawer-menu" class="drawer-menu">
-    <div style="font-size: 1.1rem; font-weight: 800; margin-bottom: 10px;">Menu</div>
-    <a href="#products" class="drawer-link">📦 開発プロダクト</a>
-    <a href="#features" class="drawer-link">⚡ ContextShelf 機能</a>
-    <a href="#pricing" class="drawer-link">💳 料金プラン</a>
-    <a href="#about" class="drawer-link">☕ CocoaLab について</a>
-    <a href="https://chromewebstore.google.com" target="_blank" style="color: var(--primary); font-weight: 800;">⬇️ Chromeに追加</a>
+    <div style="font-size: 1.1rem; font-weight: 800; margin-bottom: 8px;">Menu</div>
+    <a href="#products" class="drawer-link" data-i18n="nav-products">プロダクト</a>
+    <a href="#features" class="drawer-link" data-i18n="nav-features">機能</a>
+    <a href="#pricing" class="drawer-link" data-i18n="nav-pricing">料金</a>
+    <a href="#about" class="drawer-link" data-i18n="nav-about">開発者</a>
+    <a href="https://chromewebstore.google.com" target="_blank" style="color: var(--primary); font-weight: 800;" data-i18n="nav-cta">Chromeに追加</a>
   </aside>
 
-  <!-- ヒーローセクション -->
+  <!-- ヒーロー -->
   <section class="hero">
-    <div class="badge">🚀 CocoaLab Flagship Product &bull; v1.6.0</div>
-    <h1>Web上の知識を、<br><span class="gradient">一瞬で資産に変える</span></h1>
-    <p>
-      テキスト選択＆<code>Alt + S</code>で即保存。DOMを壊さない場所ピン、Gemini 3.5 Flash-Liteによる高速AI要約、一言メモとMarkdownエクスポートをサイドパネル完結で。
+    <div class="badge" data-i18n="hero-badge">📦 CocoaLab 開発ツール第一弾</div>
+    <h1 data-i18n="hero-title">Webの気になる文章を、<br><span class="gradient">サッと保存して整理する</span></h1>
+    <p data-i18n="hero-desc">
+      調べ物中にテキストを選んで <code>Alt + S</code> を押すだけ。元のページにいつでも戻れるピン機能、一言メモ、AI要約、Markdown保存がすぐ使えます。
     </p>
     <div class="hero-actions">
-      <a href="https://chromewebstore.google.com" target="_blank" class="btn-main">Chromeに追加（無料）</a>
-      <a href="#features" class="btn-sub">主な機能を見る</a>
+      <a href="https://chromewebstore.google.com" target="_blank" class="btn-main" data-i18n="hero-btn-add">Chromeに追加（無料）</a>
+      <a href="#features" class="btn-sub" data-i18n="hero-btn-features">機能を見る</a>
     </div>
   </section>
 
@@ -640,101 +678,99 @@
       </div>
       <div class="window-content">
         <div class="mock-card">
-          <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 6px;">📁 開発ナレッジ &bull; 2026/08/23</div>
-          <div class="mock-quote">
-            「DOM非破壊設計により、Webページの構造を壊すことなくハイライトと位置特定を両立する。」
+          <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 6px;">📁 <span data-i18n="demo-folder">開発メモ</span> &bull; 2026/08/23</div>
+          <div class="mock-quote" data-i18n="demo-quote">
+            「WebページのHTML構造を書き換えないため、サイトの表示崩れを起こさずに該当箇所を特定できる。」
           </div>
-          <div class="mock-summary">
-            ✨ <b>Gemini要約</b>: DOM非破壊設計でWebページの表示崩れを防ぎ、安全な引用管理を実現。
+          <div class="mock-summary" data-i18n="demo-summary">
+            ✨ <b>AI要約</b>: ページの表示を壊さずに安全にハイライト・保存できる仕組み。
           </div>
-          <div class="mock-note">
-            💭 <b>Note</b>: 次期アーキテクチャの参考にする
+          <div class="mock-note" data-i18n="demo-note">
+            💭 <b>メモ</b>: 次のプロジェクトで使う
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 開発プロダクト一覧 (Products) -->
+  <!-- プロダクト一覧 -->
   <section id="products" class="section-wrap bg-light">
     <div class="section-title-wrap">
-      <h2>Products by CocoaLab</h2>
-      <p>日常の作業効率を10倍にするマイクロツールを開発・運営しています。</p>
+      <h2 data-i18n="products-heading">つくったもの</h2>
+      <p data-i18n="products-sub">毎日の作業が少し快適になるツールを個人で作っています。</p>
     </div>
 
     <div class="products-grid">
-      <!-- Product 1: ContextShelf -->
       <div class="product-card">
         <div>
           <div class="product-header">
             <h3 class="product-title">ContextShelf</h3>
-            <span class="product-tag">Active &bull; Flagship</span>
+            <span class="product-tag">公開中</span>
           </div>
-          <p class="product-desc">
-            Web引用・調査メモを1秒で収集し、Gemini 3.5 Flash-Liteで要約・整理するブラウザ拡張機能。研究者・エンジニア・ライターに最適。
+          <p class="product-desc" data-i18n="p1-desc">
+            Webの引用や調べ物メモを1秒で保存し、元の場所へのジャンプやAI要約ができるブラウザ拡張機能です。
           </p>
         </div>
-        <a href="https://chromewebstore.google.com" target="_blank" class="btn-main" style="text-align: center; font-size: 0.95rem; padding: 10px;">今すぐ利用する</a>
+        <a href="https://chromewebstore.google.com" target="_blank" class="btn-main" style="text-align: center; font-size: 0.9rem; padding: 8px;" data-i18n="p1-btn">使ってみる</a>
       </div>
 
-      <!-- Product 2: Upcoming Micro Tool -->
       <div class="product-card">
         <div>
           <div class="product-header">
             <h3 class="product-title">Markdown Hub</h3>
-            <span class="product-tag" style="background:#f1f5f9; color:#64748b;">In Development</span>
+            <span class="product-tag" style="background:#f1f5f9; color:#64748b;" data-i18n="p2-status">開発中</span>
           </div>
-          <p class="product-desc">
-            ブラウザ上のあらゆるテキストをワンクリックで整形・Markdown構文へ変換する超軽量ユーティリティ。
+          <p class="product-desc" data-i18n="p2-desc">
+            コピーした文章をワンクリックで綺麗なMarkdown形式に整える軽量ツールです。
           </p>
         </div>
-        <button disabled class="btn-sub" style="opacity: 0.6; cursor: not-allowed; font-size: 0.95rem; padding: 10px;">近日公開予定</button>
+        <button disabled class="btn-sub" style="opacity: 0.6; cursor: not-allowed; font-size: 0.9rem; padding: 8px;" data-i18n="p2-btn">準備中</button>
       </div>
     </div>
   </section>
 
-  <!-- ContextShelf 主要機能 -->
+  <!-- 機能一覧 -->
   <section id="features" class="section-wrap">
     <div class="section-title-wrap">
-      <h2>ストレスゼロの研究・情報収集</h2>
-      <p>スクラップブックと最新AIの強みをブラウザサイドパネルに集約しました。</p>
+      <h2 data-i18n="features-heading">ContextShelf の便利なところ</h2>
+      <p data-i18n="features-sub">必要な機能だけをサイドパネルにまとめました。</p>
     </div>
 
     <div class="grid-3">
       <div class="card-feature">
         <div class="card-icon">⚡</div>
-        <h3>1秒で引用保存</h3>
-        <p>テキストを選択して <code>Alt + S</code>。ページタイトル、URL、引用文をDOMを汚さずに即座に記録します。</p>
+        <h3 data-i18n="f1-title">選択して1秒で保存</h3>
+        <p data-i18n="f1-desc">テキストを選んで <code>Alt + S</code> を押すだけ。タイトルやURLも一緒にすぐ保存されます。</p>
       </div>
 
       <div class="card-feature">
         <div class="card-icon">📍</div>
-        <h3>場所ピン＆ジャンプ</h3>
-        <p>「📍場所」を押すと元のWebページの該当位置まで自動スクロールし、淡い赤色マーカーでハイライト表示します。</p>
+        <h3 data-i18n="f2-title">元の場所にすぐ戻れる</h3>
+        <p data-i18n="f2-desc">「📍場所」ボタンを押すと元のWebページの保存した位置まで自動でスクロールし、赤色マーカーで示します。</p>
       </div>
 
       <div class="card-feature">
         <div class="card-icon">✨</div>
-        <h3>Gemini 3.5 Flash-Lite要約</h3>
-        <p>長文引用もワンクリックで2〜3行の箇条書きに要約。最速・低コストなFlash-Liteモデルにより即時レスポンスを実現。</p>
+        <h3 data-i18n="f3-title">AIですぐ要約</h3>
+        <p data-i18n="f3-desc">長文の引用もワンクリックで2〜3行に要約。サッと内容を思い出せます。</p>
       </div>
 
       <div class="card-feature">
         <div class="card-icon">💭</div>
-        <h3>一言メモ＆テキスト編集</h3>
-        <p>引用ごとに「なぜ保存したか」の所感をメモ入力。引用文の不要な改行や余計な文字もその場で修正できます。</p>
+        <h3 data-i18n="f4-title">一言メモ＆文章の手直し</h3>
+        <p data-i18n="f4-desc">「なぜ保存したか」のメモを残せます。保存した引用文の余計な文字もその場で編集可能です。</p>
       </div>
 
       <div class="card-feature">
         <div class="card-icon">📁</div>
-        <h3>フォルダ＆タグ分類</h3>
-        <p>プロジェクト別のフォルダ分けや、<code>#重要</code> などのタグ付けに対応。キーワード検索時はヒット箇所が光ります。</p>
+        <h3 data-i18n="f5-title">フォルダ・タグで整理</h3>
+        <p data-i18n="f5-desc">フォルダ分けやタグ付けができます。キーワード検索時は一致した部分が黄色く光って見つけやすいです。</p>
       </div>
 
       <div class="card-feature">
         <div class="card-icon">📥</div>
-        <h3>Markdown / JSON 出力</h3>
-        <p>蓄積した引用とメモを一括でMarkdown形式でダウンロード。Text Fragmentリンク付きで外部へシームレスに引き継げます。</p>
+        <h3 data-i18n="f6-title">Markdown / JSON で保存</h3>
+        <p data-i18n="f6-desc">溜まったメモを一括でMarkdownファイルとしてダウンロード。自分のエディタにすぐ移行できます。</p>
       </div>
     </div>
   </section>
@@ -742,79 +778,229 @@
   <!-- 料金プラン -->
   <section id="pricing" class="section-wrap bg-light">
     <div class="section-title-wrap">
-      <h2>シンプルな3段階プラン</h2>
-      <p>まずは無料でスタート。必要に応じてプロフェッショナル向けプランへ。</p>
+      <h2 data-i18n="pricing-heading">料金プラン</h2>
+      <p data-i18n="pricing-sub">まずは無料で使えます。たくさん保存したくなったら有料プランへどうぞ。</p>
     </div>
 
     <div class="pricing-grid">
       <!-- Free -->
       <div class="price-box">
         <div class="plan-name">Free</div>
-        <div class="plan-amount">$0 <span>/ 永久無料</span></div>
+        <div class="plan-amount" id="price-free">¥0 <span>/ ずっと無料</span></div>
+        <div class="plan-note" style="visibility: hidden;">-</div>
         <ul class="plan-list">
-          <li>✔ 保存件数 <b>最大30件</b></li>
-          <li>✔ フォルダ作成 <b>2個まで</b></li>
-          <li>✔ 一言メモ＆テキスト編集</li>
-          <li>✔ タグ付け＆キーワード検索</li>
-          <li>✔ AI要約（1日3回まで）</li>
+          <li data-i18n="plan-free-1">✔ 保存：<b>最大30件まで</b></li>
+          <li data-i18n="plan-free-2">✔ フォルダ：<b>2個まで</b></li>
+          <li data-i18n="plan-free-3">✔ 一言メモ＆文章の直接編集</li>
+          <li data-i18n="plan-free-4">✔ タグ付け＆検索</li>
+          <li data-i18n="plan-free-5">✔ AI要約（1日3回まで）</li>
         </ul>
-        <a href="https://chromewebstore.google.com" target="_blank" class="btn-plan btn-plan-free">無料で始める</a>
+        <a href="https://chromewebstore.google.com" target="_blank" class="btn-plan btn-plan-free" data-i18n="plan-btn-free">無料で使う</a>
       </div>
 
-      <!-- Pro (月額) -->
+      <!-- Pro -->
       <div class="price-box">
         <div class="plan-name">Pro</div>
-        <div class="plan-amount">$4 <span>/ 月</span></div>
+        <div class="plan-amount" id="price-pro">¥600 <span>/ 月</span></div>
+        <div class="plan-note" id="note-pro">※ $4（1ドル=150円換算）</div>
         <ul class="plan-list">
-          <li>✔ 保存件数 <b>無制限</b></li>
-          <li>✔ フォルダ作成 <b>無制限</b></li>
-          <li>✔ ✨ <b>Gemini AI要約 無制限</b></li>
-          <li>✔ <b>Markdown / JSON 一括出力</b></li>
-          <li>✔ コピー時の署名削除</li>
+          <li data-i18n="plan-pro-1">✔ 保存件数：<b>無制限</b></li>
+          <li data-i18n="plan-pro-2">✔ フォルダ作成：<b>無制限</b></li>
+          <li data-i18n="plan-pro-3">✔ ✨ <b>AI要約：使い放題</b></li>
+          <li data-i18n="plan-pro-4">✔ <b>Markdown / JSON 一括出力</b></li>
+          <li data-i18n="plan-pro-5">✔ コピー時の署名なし</li>
         </ul>
-        <a href="https://chromewebstore.google.com" target="_blank" class="btn-plan btn-plan-pro">Proを始める ($4/月)</a>
+        <a href="https://chromewebstore.google.com" target="_blank" class="btn-plan btn-plan-pro" data-i18n="plan-btn-pro">月額で始める</a>
       </div>
 
       <!-- Premium Pro (買い切り) -->
       <div class="price-box popular">
-        <div class="popular-tag">一番人気・買い切り</div>
+        <div class="popular-tag" data-i18n="plan-popular">買い切りで人気</div>
         <div class="plan-name">Premium Pro</div>
-        <div class="plan-amount">$30 <span>/ 一生使い放題</span></div>
+        <div class="plan-amount" id="price-prem">¥4,500 <span>/ 買い切り</span></div>
+        <div class="plan-note" id="note-prem">※ $30（1ドル=150円換算）</div>
         <ul class="plan-list">
-          <li>✔ <b>Proと全く同じ全機能</b></li>
-          <li>✔ <b>追加の月額料金なし</b></li>
-          <li>✔ 今後のアップデートも永久有効</li>
-          <li>✔ 1回払いでずっと利用可能</li>
-          <li>✔ 優先サポート</li>
+          <li data-i18n="plan-prem-1">✔ <b>Proの全機能がずっと使える</b></li>
+          <li data-i18n="plan-prem-2">✔ <b>追加の月額料金なし（1回払い）</b></li>
+          <li data-i18n="plan-prem-3">✔ 今後のアップデートも無料</li>
+          <li data-i18n="plan-prem-4">✔ ずっと使い続けたい人向け</li>
         </ul>
-        <a href="https://chromewebstore.google.com" target="_blank" class="btn-plan btn-plan-premium">買い切りで購入 ($30)</a>
+        <a href="https://chromewebstore.google.com" target="_blank" class="btn-plan btn-plan-premium" data-i18n="plan-btn-prem">買い切りで購入</a>
       </div>
     </div>
   </section>
 
-  <!-- CocoaLab Studio & 開発者について -->
+  <!-- CocoaLabについて -->
   <section id="about" class="section-wrap">
     <div class="about-section">
       <div class="creator-avatar">☕</div>
       <h2>About CocoaLab</h2>
-      <div class="creator-role">Indie Micro Studio &bull; Founded by Cocoa</div>
-      <p>
-        CocoaLab（ココアラボ）は、「毎日のデジタル作業を1秒速く、10倍シンプルに」を掲げるインディー開発スタジオです。<br>
-        機能が肥大化した重いツールではなく、ブラウザ上で軽快に動き、思考を妨げない高品質なマイクロツールを企画・開発・運営しています。
+      <div class="creator-role">個人開発スタジオ</div>
+      <p data-i18n="about-text">
+        CocoaLab（ココアラボ）は、「日常のパソコン作業を少しでもシンプルで速くする」ことを目指して個人でツールを作っています。<br>
+        無駄な機能をつけすぎず、軽くて使いやすいプロダクトを心がけています。
       </p>
-      <div style="font-size: 0.9rem; color: #94a3b8;">
-        Built with clean code, zero trackers, and browser-native technologies.
-      </div>
     </div>
   </section>
 
   <!-- フッター -->
   <footer>
-    <p>&copy; 2026 CocoaLab. All rights reserved. &bull; Crafted by Cocoa</p>
+    <p>&copy; 2026 CocoaLab. All rights reserved. &bull; Created by Cocoa</p>
   </footer>
 
-  <!-- ドロワーメニュー開閉スクリプト -->
+  <!-- 多言語切り替え ＆ ドロワースクリプト -->
   <script>
+    const translations = {
+      ja: {
+        "nav-products": "プロダクト",
+        "nav-features": "機能",
+        "nav-pricing": "料金",
+        "nav-about": "開発者",
+        "nav-cta": "Chromeに追加",
+        "hero-badge": "📦 CocoaLab 開発ツール第一弾",
+        "hero-title": "Webの気になる文章を、<br><span class=\"gradient\">サッと保存して整理する</span>",
+        "hero-desc": "調べ物中にテキストを選んで <code>Alt + S</code> を押すだけ。元のページにいつでも戻れるピン機能、一言メモ、AI要約、Markdown保存がすぐ使えます。",
+        "hero-btn-add": "Chromeに追加（無料）",
+        "hero-btn-features": "機能を見る",
+        "demo-folder": "開発メモ",
+        "demo-quote": "「WebページのHTML構造を書き換えないため、サイトの表示崩れを起こさずに該当箇所を特定できる。」",
+        "demo-summary": "✨ <b>AI要約</b>: ページの表示を壊さずに安全にハイライト・保存できる仕組み。",
+        "demo-note": "💭 <b>メモ</b>: 次のプロジェクトで使う",
+        "products-heading": "つくったもの",
+        "products-sub": "毎日の作業が少し快適になるツールを個人で作っています。",
+        "p1-desc": "Webの引用や調べ物メモを1秒で保存し、元の場所へのジャンプやAI要約ができるブラウザ拡張機能です。",
+        "p1-btn": "使ってみる",
+        "p2-status": "開発中",
+        "p2-desc": "コピーした文章をワンクリックで綺麗なMarkdown形式に整える軽量ツールです。",
+        "p2-btn": "準備中",
+        "features-heading": "ContextShelf の便利なところ",
+        "features-sub": "必要な機能だけをサイドパネルにまとめました。",
+        "f1-title": "選択して1秒で保存",
+        "f1-desc": "テキストを選んで <code>Alt + S</code> を押すだけ。タイトルやURLも一緒にすぐ保存されます。",
+        "f2-title": "元の場所にすぐ戻れる",
+        "f2-desc": "「📍場所」ボタンを押すと元のWebページの保存した位置まで自動でスクロールし、赤色マーカーで示します。",
+        "f3-title": "AIですぐ要約",
+        "f3-desc": "長文の引用もワンクリックで2〜3行に要約。サッと内容を思い出せます。",
+        "f4-title": "一言メモ＆文章の手直し",
+        "f4-desc": "「なぜ保存したか」のメモを残せます。保存した引用文の余計な文字もその場で編集可能です。",
+        "f5-title": "フォルダ・タグで整理",
+        "f5-desc": "フォルダ分けやタグ付けができます。キーワード検索時は一致した部分が黄色く光って見つけやすいです。",
+        "f6-title": "Markdown / JSON で保存",
+        "f6-desc": "溜まったメモを一括でMarkdownファイルとしてダウンロード。自分のエディタにすぐ移行できます。",
+        "pricing-heading": "料金プラン",
+        "pricing-sub": "まずは無料で使えます。たくさん保存したくなったら有料プランへどうぞ。",
+        "plan-popular": "買い切りで人気",
+        "plan-free-1": "✔ 保存：<b>最大30件まで</b>",
+        "plan-free-2": "✔ フォルダ：<b>2個まで</b>",
+        "plan-free-3": "✔ 一言メモ＆文章の直接編集",
+        "plan-free-4": "✔ タグ付け＆検索",
+        "plan-free-5": "✔ AI要約（1日3回まで）",
+        "plan-btn-free": "無料で使う",
+        "plan-pro-1": "✔ 保存件数：<b>無制限</b>",
+        "plan-pro-2": "✔ フォルダ作成：<b>無制限</b>",
+        "plan-pro-3": "✔ ✨ <b>AI要約：使い放題</b>",
+        "plan-pro-4": "✔ <b>Markdown / JSON 一括出力</b>",
+        "plan-pro-5": "✔ コピー時の署名なし",
+        "plan-btn-pro": "月額で始める",
+        "plan-prem-1": "✔ <b>Proの全機能がずっと使える</b>",
+        "plan-prem-2": "✔ <b>追加の月額料金なし（1回払い）</b>",
+        "plan-prem-3": "✔ 今後のアップデートも無料",
+        "plan-prem-4": "✔ ずっと使い続けたい人向け",
+        "plan-btn-prem": "買い切りで購入",
+        "price-free": "¥0 <span>/ ずっと無料</span>",
+        "price-pro": "¥600 <span>/ 月</span>",
+        "price-prem": "¥4,500 <span>/ 買い切り</span>",
+        "note-pro": "※ $4（1ドル=150円換算）",
+        "note-prem": "※ $30（1ドル=150円換算）",
+        "about-text": "CocoaLab（ココアラボ）は、「日常のパソコン作業を少しでもシンプルで速くする」ことを目指して個人でツールを作っています。<br>無駄な機能をつけすぎず、軽くて使いやすいプロダクトを心がけています。"
+      },
+      en: {
+        "nav-products": "Products",
+        "nav-features": "Features",
+        "nav-pricing": "Pricing",
+        "nav-about": "About",
+        "nav-cta": "Add to Chrome",
+        "hero-badge": "📦 Product #1 by CocoaLab",
+        "hero-title": "Capture quotes from the web,<br><span class=\"gradient\">organize in seconds.</span>",
+        "hero-desc": "Select text and hit <code>Alt + S</code>. Pinpoint source locations, write quick notes, summarize with AI, and export clean Markdown without leaving your sidebar.",
+        "hero-btn-add": "Add to Chrome (Free)",
+        "hero-btn-features": "Explore Features",
+        "demo-folder": "Research",
+        "demo-quote": "\"Non-destructive DOM design ensures webpage highlights stay intact without breaking the site layout.\"",
+        "demo-summary": "✨ <b>AI Summary</b>: Highlights and saves quotes safely without altering the webpage HTML.",
+        "demo-note": "💭 <b>Note</b>: Reference for next project",
+        "products-heading": "Products",
+        "products-sub": "Simple, focused tools designed to speed up daily digital workflows.",
+        "p1-desc": "Capture web quotes, pin original locations, summarize with AI, and export to Markdown seamlessly.",
+        "p1-btn": "Get Extension",
+        "p2-status": "In Development",
+        "p2-desc": "A lightweight utility to format and clean up text into clean Markdown with one click.",
+        "p2-btn": "Coming Soon",
+        "features-heading": "Built for Focused Research",
+        "features-sub": "Everything you need, right inside your browser sidebar.",
+        "f1-title": "1-Second Capture",
+        "f1-desc": "Select text and press <code>Alt + S</code>. Instantly saves the quote, source title, and URL.",
+        "f2-title": "Jump Back to Source",
+        "f2-desc": "Click 'Location' to scroll right back to the quote on the original webpage with a clean marker.",
+        "f3-title": "Fast AI Summary",
+        "f3-desc": "Summarize lengthy quotes into 2-3 concise bullet points with a single click.",
+        "f4-title": "Quick Notes & Editing",
+        "f4-desc": "Add why you saved it. Trim unwanted characters or edit quotes directly in the panel.",
+        "f5-title": "Folders & Search",
+        "f5-desc": "Organize with custom folders and tags. Keyword search highlights matched text instantly.",
+        "f6-title": "Markdown / JSON Export",
+        "f6-desc": "Download all saved notes in clean Markdown with Text Fragment URLs anytime.",
+        "pricing-heading": "Simple Pricing",
+        "pricing-sub": "Start free. Upgrade whenever you need unlimited capacity.",
+        "plan-popular": "Most Popular",
+        "plan-free-1": "✔ Capacity: <b>Up to 30 snippets</b>",
+        "plan-free-2": "✔ Folders: <b>Up to 2 folders</b>",
+        "plan-free-3": "✔ Quick notes & inline editing",
+        "plan-free-4": "✔ Tags & keyword search",
+        "plan-free-5": "✔ AI Summaries (3/day)",
+        "plan-btn-free": "Start Free",
+        "plan-pro-1": "✔ Snippet Capacity: <b>Unlimited</b>",
+        "plan-pro-2": "✔ Custom Folders: <b>Unlimited</b>",
+        "plan-pro-3": "✔ ✨ <b>AI Summaries: Unlimited</b>",
+        "plan-pro-4": "✔ <b>Markdown & JSON Bulk Export</b>",
+        "plan-pro-5": "✔ Clean copy (no watermark)",
+        "plan-btn-pro": "Start Pro ($4/mo)",
+        "plan-prem-1": "✔ <b>All Pro features included</b>",
+        "plan-prem-2": "✔ <b>Pay once, use forever</b>",
+        "plan-prem-3": "✔ All future updates included",
+        "plan-prem-4": "✔ Best for long-term users",
+        "plan-btn-prem": "Get Lifetime ($30)",
+        "price-free": "$0 <span>/ Free forever</span>",
+        "price-pro": "$4 <span>/ month</span>",
+        "price-prem": "$30 <span>/ lifetime</span>",
+        "note-pro": "Billed monthly. Cancel anytime.",
+        "note-prem": "One-time payment. No subscription.",
+        "about-text": "CocoaLab is an indie studio crafting micro tools that make daily computer work simpler and faster.<br>No bloated menus—just lightweight, dependable software."
+      }
+    };
+
+    function setLanguage(lang) {
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (translations[lang][key]) {
+          el.innerHTML = translations[lang][key];
+        }
+      });
+
+      document.getElementById("price-free").innerHTML = translations[lang]["price-free"];
+      document.getElementById("price-pro").innerHTML = translations[lang]["price-pro"];
+      document.getElementById("price-prem").innerHTML = translations[lang]["price-prem"];
+      document.getElementById("note-pro").textContent = translations[lang]["note-pro"];
+      document.getElementById("note-prem").textContent = translations[lang]["note-prem"];
+
+      document.getElementById("lang-ja").classList.toggle("active", lang === "ja");
+      document.getElementById("lang-en").classList.toggle("active", lang === "en");
+    }
+
+    document.getElementById("lang-ja").addEventListener("click", () => setLanguage("ja"));
+    document.getElementById("lang-en").addEventListener("click", () => setLanguage("en"));
+
+    // ドロワーメニュー
     const hamburgerBtn = document.getElementById('hamburger-btn');
     const drawerMenu = document.getElementById('drawer-menu');
     const drawerOverlay = document.getElementById('drawer-overlay');
@@ -827,9 +1013,7 @@
 
     hamburgerBtn.addEventListener('click', toggleMenu);
     drawerOverlay.addEventListener('click', toggleMenu);
-    drawerLinks.forEach(link => {
-      link.addEventListener('click', toggleMenu);
-    });
+    drawerLinks.forEach(link => link.addEventListener('click', toggleMenu));
   </script>
 
 </body>
