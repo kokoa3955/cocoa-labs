@@ -6,13 +6,15 @@
   <title>Cocoa Labs - Chrome Extensions & Micro Tools</title>
   <style>
     :root {
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --bg: #f8fafc;
-      --card-bg: #ffffff;
-      --text: #1e293b;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-light: #818cf8;
+      --bg: #070913;
+      --card-bg: rgba(15, 23, 42, 0.75);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.12);
     }
 
     * {
@@ -29,16 +31,29 @@
     body {
       line-height: 1.6;
       color: var(--text);
-      background-color: var(--bg);
+      background: radial-gradient(ellipse at top, #0f172a 0%, #070913 100%);
+      min-height: 100vh;
       overflow-x: hidden;
     }
 
-    /* 固定ナビゲーション */
+    /* ✨ 星空 Canvas 背景 */
+    #starfield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* 固定ナビゲーション（すりガラス） */
     header.nav-header {
       position: sticky;
       top: 0;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(8px);
+      background: rgba(7, 9, 19, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
       z-index: 100;
     }
@@ -55,11 +70,12 @@
     .nav-logo {
       font-size: 1.15rem;
       font-weight: 800;
-      color: var(--text);
+      color: #ffffff;
       text-decoration: none;
       display: flex;
       align-items: center;
       gap: 6px;
+      text-shadow: 0 0 12px rgba(99, 102, 241, 0.6);
     }
 
     .nav-right {
@@ -71,7 +87,7 @@
     /* 言語切り替えトグル */
     .lang-switcher {
       display: flex;
-      background: #f1f5f9;
+      background: rgba(30, 41, 59, 0.8);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 2px;
@@ -80,19 +96,19 @@
     .lang-btn {
       background: none;
       border: none;
-      padding: 3px 8px;
+      padding: 3px 10px;
       font-size: 0.75rem;
       font-weight: 700;
       border-radius: 12px;
       cursor: pointer;
       color: var(--text-muted);
-      transition: all 0.15s;
+      transition: all 0.2s;
     }
 
     .lang-btn.active {
-      background: #ffffff;
-      color: var(--text);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
     }
 
     /* ハンバーガーメニュー */
@@ -118,7 +134,8 @@
     .drawer-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.4);
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.25s ease;
@@ -133,15 +150,16 @@
     .drawer-menu {
       position: fixed;
       top: 0;
-      right: -260px;
-      width: 260px;
+      right: -280px;
+      width: 280px;
       height: 100vh;
-      background: #ffffff;
-      padding: 60px 20px 20px;
+      background: #0f172a;
+      border-left: 1px solid var(--border);
+      padding: 60px 24px 24px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+      gap: 16px;
+      box-shadow: -8px 0 30px rgba(0,0,0,0.5);
       transition: right 0.25s ease;
       z-index: 1001;
     }
@@ -153,39 +171,47 @@
     .drawer-menu a {
       font-size: 0.95rem;
       font-weight: 600;
-      color: var(--text);
+      color: #e2e8f0;
       text-decoration: none;
-      padding: 6px 0;
+      padding: 8px 0;
       border-bottom: 1px solid var(--border);
+      transition: color 0.15s;
+    }
+
+    .drawer-menu a:hover {
+      color: var(--primary-light);
     }
 
     /* メインコンテナ */
     .container {
       max-width: 900px;
       margin: 0 auto;
-      padding: 1.5rem 1rem 3rem;
+      padding: 1.5rem 1rem 4rem;
     }
 
     .hero-header {
       text-align: center;
-      padding: 2.5rem 1rem 2rem;
+      padding: 3.5rem 1rem 2.5rem;
     }
 
     .hero-badge {
       display: inline-block;
-      background: #dbeafe;
-      color: var(--primary);
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      color: var(--primary-light);
       font-size: 0.8rem;
       font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 12px;
-      margin-bottom: 12px;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+      letter-spacing: 0.5px;
     }
 
     .hero-header h1 {
-      font-size: 2.2rem;
-      margin-bottom: 0.5rem;
-      color: var(--text);
+      font-size: 2.5rem;
+      margin-bottom: 0.8rem;
+      color: #ffffff;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
     }
 
     .hero-header p {
@@ -195,7 +221,7 @@
       margin: 0 auto;
     }
 
-    /* プロダクト一覧 */
+    /* プロダクト一覧（ラインナップ） */
     .products-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -205,25 +231,33 @@
 
     .product-box {
       background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.25rem;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.4rem;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .product-box:hover {
+      transform: translateY(-3px);
+      border-color: rgba(99, 102, 241, 0.5);
     }
 
     .product-top {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.7rem;
     }
 
     .product-title {
       font-size: 1.15rem;
       font-weight: 800;
+      color: #ffffff;
     }
 
     .badge-status {
@@ -233,20 +267,20 @@
       border-radius: 10px;
     }
 
-    .status-active { background: #dcfce7; color: #15803d; }
-    .status-dev { background: #fef9c3; color: #a16207; }
-    .status-plan { background: #f1f5f9; color: #64748b; }
+    .status-active { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+    .status-dev { background: rgba(234, 179, 8, 0.2); color: #facc15; border: 1px solid rgba(234, 179, 8, 0.3); }
+    .status-plan { background: rgba(148, 163, 184, 0.2); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.3); }
 
     .product-desc {
       font-size: 0.88rem;
       color: var(--text-muted);
-      margin-bottom: 1rem;
+      margin-bottom: 1.2rem;
     }
 
     .product-link {
       font-size: 0.85rem;
       font-weight: 700;
-      color: var(--primary);
+      color: var(--primary-light);
       text-decoration: none;
     }
 
@@ -260,48 +294,53 @@
 
     .pricing-card {
       background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.5rem;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.6rem;
       text-align: center;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
       position: relative;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s;
     }
 
     .pricing-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.07);
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
     }
 
     .pricing-card.featured {
       border: 2px solid var(--primary);
+      background: rgba(30, 27, 75, 0.6);
+      box-shadow: 0 0 25px rgba(99, 102, 241, 0.25);
     }
 
     .popular-tag {
       position: absolute;
       top: -11px;
       right: 16px;
-      background: var(--primary);
+      background: linear-gradient(135deg, #6366f1, #a855f7);
       color: #ffffff;
       font-size: 0.75rem;
-      font-weight: 700;
-      padding: 2px 8px;
+      font-weight: 800;
+      padding: 3px 10px;
       border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(168, 85, 247, 0.4);
     }
 
     .pricing-card h3 {
       font-size: 1.3rem;
       margin-bottom: 0.5rem;
+      color: #ffffff;
     }
 
     .price {
-      font-size: 2rem;
-      font-weight: bold;
-      color: var(--primary);
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: #ffffff;
       margin-bottom: 0.2rem;
     }
 
@@ -313,18 +352,18 @@
 
     .price-note {
       font-size: 0.75rem;
-      color: #94a3b8;
-      margin-bottom: 1rem;
+      color: #64748b;
+      margin-bottom: 1.2rem;
     }
 
     .pricing-features {
       list-style: none;
       font-size: 0.9rem;
-      color: var(--text);
+      color: #cbd5e1;
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
-      margin-bottom: 1.2rem;
+      gap: 0.5rem;
+      margin-bottom: 1.4rem;
       text-align: left;
       padding: 0 0.5rem;
     }
@@ -332,44 +371,49 @@
     .btn-plan {
       display: inline-block;
       width: 100%;
-      padding: 8px;
-      border-radius: 6px;
+      padding: 9px;
+      border-radius: 8px;
       font-weight: 700;
       text-decoration: none;
       font-size: 0.9rem;
-      background: #f1f5f9;
-      color: var(--text);
-      transition: background 0.15s ease;
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.2s ease;
     }
 
     .btn-plan:hover {
-      background: #e2e8f0;
+      background: rgba(255, 255, 255, 0.15);
     }
 
     .btn-plan.featured {
-      background: var(--primary);
-      color: #ffffff;
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      border: none;
+      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
     }
 
     .btn-plan.featured:hover {
-      background: var(--primary-hover);
+      background: linear-gradient(135deg, #4338ca, #6d28d9);
+      box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6);
     }
 
-    /* 各セクション */
+    /* 各セクション（すりガラス） */
     .section {
       background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 2rem;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 2.2rem;
       margin-bottom: 2rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
     }
 
     .section h2 {
-      font-size: 1.35rem;
-      border-bottom: 2px solid var(--border);
-      padding-bottom: 0.5rem;
-      margin-bottom: 1rem;
+      font-size: 1.4rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.6rem;
+      margin-bottom: 1.2rem;
+      color: #ffffff;
     }
 
     table {
@@ -380,37 +424,49 @@
 
     th, td {
       border: 1px solid var(--border);
-      padding: 0.75rem;
+      padding: 0.85rem;
       text-align: left;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
     }
 
     th {
-      background-color: var(--bg);
+      background-color: rgba(30, 41, 59, 0.5);
       width: 32%;
       font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    td {
+      color: #cbd5e1;
     }
 
     ul, ol {
       padding-left: 1.5rem;
       margin-bottom: 1rem;
+      color: #cbd5e1;
     }
 
     li {
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
       font-size: 0.95rem;
+    }
+
+    code {
+      background: rgba(99, 102, 241, 0.2);
+      color: #a5b4fc;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
     }
 
     footer {
       text-align: center;
-      color: var(--text-muted);
+      color: #64748b;
       font-size: 0.85rem;
       padding: 2rem 0 1rem;
     }
 
-    /* ============================================================
-       ✨ 何度でもふわっと表示＆消えるリピートアニメーション
-       ============================================================ */
+    /* 双方向ふわっとアニメーション */
     .reveal {
       opacity: 0;
       transform: translateY(32px);
@@ -423,7 +479,6 @@
       transform: translateY(0);
     }
 
-    /* 料金カードのふわっとディレイ */
     .pricing-card.reveal:nth-child(1) { transition-delay: 0.04s; }
     .pricing-card.reveal:nth-child(2) { transition-delay: 0.12s; }
     .pricing-card.reveal:nth-child(3) { transition-delay: 0.2s; }
@@ -431,10 +486,13 @@
 </head>
 <body>
 
+  <!-- ✨ 流れる星空 Canvas -->
+  <canvas id="starfield"></canvas>
+
   <!-- 固定ナビゲーション -->
   <header class="nav-header">
     <div class="nav-container">
-      <a href="#" class="nav-logo">📦 Cocoa Labs</a>
+      <a href="#" class="nav-logo">✨ Cocoa Labs</a>
       
       <div class="nav-right">
         <div class="lang-switcher">
@@ -454,7 +512,7 @@
   <!-- ドロワーメニュー -->
   <div id="drawer-overlay" class="drawer-overlay"></div>
   <aside id="drawer-menu" class="drawer-menu">
-    <div style="font-weight: 800; color: var(--text-muted); font-size: 0.85rem;">NAVIGATION</div>
+    <div style="font-weight: 800; color: var(--text-muted); font-size: 0.85rem; letter-spacing: 1px;">NAVIGATION</div>
     <a href="#products" class="drawer-link" data-i18n="nav-products">プロダクト一覧</a>
     <a href="#pricing" class="drawer-link" data-i18n="nav-pricing">料金プラン</a>
     <a href="#features" class="drawer-link" data-i18n="nav-features">主な機能</a>
@@ -500,7 +558,7 @@
               Web上の表や整形済みテキストをワンクリックで崩れのない綺麗なMarkdown構文に自動変換・クリップボードへ送る軽量ツール。
             </p>
           </div>
-          <span style="font-size:0.8rem; color:#a16207;" data-i18n="p2-sub">近日公開予定</span>
+          <span style="font-size:0.8rem; color:#facc15;" data-i18n="p2-sub">近日公開予定</span>
         </div>
 
         <!-- 3. Prompt Pocket (企画中) -->
@@ -514,7 +572,7 @@
               よく使うAIプロンプトをショートカットキーで瞬時に呼び出し、入力欄へ自動挿入できる定型文サポート拡張機能。
             </p>
           </div>
-          <span style="font-size:0.8rem; color:#64748b;" data-i18n="p3-sub">設計フェーズ</span>
+          <span style="font-size:0.8rem; color:#94a3b8;" data-i18n="p3-sub">設計フェーズ</span>
         </div>
       </div>
     </section>
@@ -577,7 +635,7 @@
       <ul>
         <li data-i18n="feat-1"><strong>1秒で引用保存</strong>: Web上の文章を選択して <code>Alt + S</code> または右クリックするだけで、タイトルやURLと一緒にサイドパネルへ記録。</li>
         <li data-i18n="feat-2"><strong>場所ピン＆ジャンプ</strong>: 「📍場所」ボタンを押すと、元のWebページの引用位置まで自動スクロールし、赤色マーカーで示します。</li>
-        <li data-i18n="feat-3"><strong>Gemini 3.5 Flash-Lite 高速要約</strong>: 長い引用もワンクリックで2〜3行の箇条書きに要約。</li>
+        <li data-i18n="feat-3"><strong>Gemini 3.5 Flash-Lite 高速要約</strong>: 長い引用もワンクリックで約1/3の読みやすい箇条書きに要約。</li>
         <li data-i18n="feat-4"><strong>一言メモ＆テキスト編集</strong>: 「なぜ保存したか」の所感を残したり、引用文の不要な文字をその場で手直しできます。</li>
         <li data-i18n="feat-5"><strong>Markdown / JSON 出力</strong>: 溜まったデータを一括ダウンロードし、外部エディタへ手軽に引き継げます。</li>
       </ul>
@@ -649,8 +707,124 @@
     </footer>
   </div>
 
-  <!-- 多言語切り替え & 双方向スクロールスクリプト -->
   <script>
+    // ============================================================
+    // ✨ 星空 ＆ 流れ星 Canvas アニメーション
+    // ============================================================
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+
+    let width, height;
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // 瞬く星たち
+    const stars = Array.from({ length: 140 }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      radius: Math.random() * 1.4 + 0.3,
+      alpha: Math.random() * 0.8 + 0.2,
+      speed: Math.random() * 0.02 + 0.005,
+      direction: Math.random() > 0.5 ? 1 : -1
+    }));
+
+    // 流れ星（Shooting Stars）
+    let shootingStars = [];
+
+    function createShootingStar() {
+      const startX = Math.random() * (width * 0.8) + (width * 0.1);
+      const startY = Math.random() * (height * 0.4);
+      const angle = (Math.PI / 4) + (Math.random() * 0.2 - 0.1); // 斜め約45度
+      const speed = Math.random() * 7 + 8;
+      
+      shootingStars.push({
+        x: startX,
+        y: startY,
+        length: Math.random() * 80 + 70,
+        speed: speed,
+        dx: Math.cos(angle) * speed,
+        dy: Math.sin(angle) * speed,
+        alpha: 1,
+        life: 0,
+        maxLife: Math.random() * 40 + 30
+      });
+    }
+
+    // 2.5秒〜4.5秒ごとに流れ星を生成
+    function scheduleShootingStar() {
+      const delay = Math.random() * 2000 + 2500;
+      setTimeout(() => {
+        createShootingStar();
+        scheduleShootingStar();
+      }, delay);
+    }
+    scheduleShootingStar();
+    // 最初の1本をすぐ流す
+    setTimeout(createShootingStar, 800);
+
+    function animateStars() {
+      ctx.clearRect(0, 0, width, height);
+
+      // 1. 瞬く星を描画
+      stars.forEach(star => {
+        star.alpha += star.speed * star.direction;
+        if (star.alpha > 0.95) { star.alpha = 0.95; star.direction = -1; }
+        if (star.alpha < 0.15) { star.alpha = 0.15; star.direction = 1; }
+
+        ctx.fillStyle = `rgba(224, 231, 255, ${star.alpha})`;
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // 2. 流れ星を描画＆更新
+      for (let i = shootingStars.length - 1; i >= 0; i--) {
+        const s = shootingStars[i];
+        s.x += s.dx;
+        s.y += s.dy;
+        s.life++;
+
+        s.alpha = 1 - (s.life / s.maxLife);
+
+        if (s.alpha <= 0 || s.x > width || s.y > height) {
+          shootingStars.splice(i, 1);
+          continue;
+        }
+
+        // 流れ星の光の尾（グラデーション）
+        const tailX = s.x - (s.dx / s.speed) * s.length;
+        const tailY = s.y - (s.dy / s.speed) * s.length;
+
+        const grad = ctx.createLinearGradient(tailX, tailY, s.x, s.y);
+        grad.addColorStop(0, 'rgba(129, 140, 248, 0)');
+        grad.addColorStop(0.7, `rgba(165, 180, 252, ${s.alpha * 0.6})`);
+        grad.addColorStop(1, `rgba(255, 255, 255, ${s.alpha})`);
+
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(tailX, tailY);
+        ctx.lineTo(s.x, s.y);
+        ctx.stroke();
+
+        // 先端の輝き
+        ctx.fillStyle = `rgba(255, 255, 255, ${s.alpha})`;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, 1.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      requestAnimationFrame(animateStars);
+    }
+    animateStars();
+
+    // ============================================================
+    // 多言語切り替え i18n
+    // ============================================================
     const i18n = {
       ja: {
         "nav-products": "プロダクト一覧",
@@ -695,7 +869,7 @@
         "sec-features-title": "ContextShelf の主な機能",
         "feat-1": "<strong>1秒で引用保存</strong>: Web上の文章を選択して <code>Alt + S</code> または右クリックするだけで、タイトルやURLと一緒にサイドパネルへ記録。",
         "feat-2": "<strong>場所ピン＆ジャンプ</strong>: 「📍場所」ボタンを押すと、元のWebページの引用位置まで自動スクロールし、赤色マーカーで示します。",
-        "feat-3": "<strong>Gemini 3.5 Flash-Lite 高速要約</strong>: 長い引用もワンクリックで2〜3行の箇条書きに要約。",
+        "feat-3": "<strong>Gemini 3.5 Flash-Lite 高速要約</strong>: 長い引用もワンクリックで約1/3の読みやすい箇条書きに要約。",
         "feat-4": "<strong>一言メモ＆テキスト編集</strong>: 「なぜ保存したか」の所感を残したり、引用文の不要な文字をその場で手直しできます。",
         "feat-5": "<strong>Markdown / JSON 出力</strong>: 溜まったデータを一括ダウンロードし、外部エディタへ手軽に引き継げます。",
         "sec-tokusho-title": "特定商取引法に基づく表記",
@@ -832,9 +1006,7 @@
     drawerOverlay.addEventListener('click', toggleDrawer);
     drawerLinks.forEach(link => link.addEventListener('click', toggleDrawer));
 
-    // ============================================================
-    // ✨ 双方向スクロール監視（画面内：表示 / 画面外：非表示へ戻す）
-    // ============================================================
+    // 双方向スクロール監視
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -845,7 +1017,7 @@
       });
     }, {
       root: null,
-      threshold: 0.08, // 8%画面に入ったらふわっと表示
+      threshold: 0.08,
       rootMargin: "0px 0px -20px 0px"
     });
 
