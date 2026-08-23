@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ContextShelf - Web Quote & Research Hub</title>
-  <meta name="description" content="Webの有益な引用・調査データを1秒で保存・整理・AI要約。研究者・エンジニア・リサーチャーのための軽量Chrome拡張機能。">
+  <title>CocoaLab - Crafting Micro-Tools & ContextShelf</title>
+  <meta name="description" content="CocoaLab - 個人開発によるシンプルで強力なWeb生産性ツールの開発スタジオ。代表作「ContextShelf」を提供中。">
   <style>
     :root {
       --primary: #4f46e5;
@@ -15,6 +15,7 @@
       --bg-alt: #f8fafc;
       --border: #e2e8f0;
       --card-bg: #ffffff;
+      --radius: 12px;
     }
 
     * {
@@ -31,27 +32,43 @@
     }
 
     /* ナビゲーション */
+    header.site-header {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+    }
+
     nav {
-      max-width: 1100px;
+      max-width: 1080px;
       margin: 0 auto;
-      padding: 20px 24px;
+      padding: 16px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .logo {
+    .brand-logo {
       font-size: 1.25rem;
       font-weight: 800;
       color: var(--text);
+      text-decoration: none;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
+    .brand-logo span {
+      background: linear-gradient(135deg, #4f46e5, #9333ea);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
     .nav-links {
       display: flex;
-      gap: 20px;
+      gap: 24px;
       align-items: center;
     }
 
@@ -67,7 +84,7 @@
       color: var(--primary);
     }
 
-    .btn-cta-nav {
+    .btn-nav-action {
       background-color: var(--primary);
       color: #ffffff !important;
       padding: 8px 16px;
@@ -75,39 +92,41 @@
       transition: background 0.15s !important;
     }
 
-    .btn-cta-nav:hover {
+    .btn-nav-action:hover {
       background-color: var(--primary-hover) !important;
     }
 
     /* ヒーローセクション */
     .hero {
-      max-width: 900px;
-      margin: 60px auto 40px;
+      max-width: 880px;
+      margin: 70px auto 40px;
       text-align: center;
       padding: 0 24px;
     }
 
-    .hero-badge {
-      display: inline-block;
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       background-color: #e0e7ff;
       color: var(--primary);
       font-size: 0.85rem;
       font-weight: 700;
-      padding: 4px 12px;
+      padding: 4px 14px;
       border-radius: 20px;
       margin-bottom: 20px;
     }
 
     .hero h1 {
-      font-size: 2.8rem;
+      font-size: 3rem;
       font-weight: 800;
-      line-height: 1.25;
-      margin-bottom: 20px;
+      line-height: 1.2;
       letter-spacing: -0.02em;
+      margin-bottom: 20px;
     }
 
-    .hero h1 span {
-      background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+    .hero h1 span.gradient {
+      background: linear-gradient(135deg, #4f46e5 0%, #a855f7 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -115,69 +134,70 @@
     .hero p {
       font-size: 1.15rem;
       color: var(--text-muted);
-      max-width: 680px;
-      margin: 0 auto 32px;
+      max-width: 640px;
+      margin: 0 auto 36px;
     }
 
-    .hero-buttons {
+    .hero-actions {
       display: flex;
       justify-content: center;
       gap: 16px;
       flex-wrap: wrap;
     }
 
-    .btn-primary {
+    .btn-main {
       background-color: var(--primary);
       color: #ffffff;
       padding: 14px 28px;
       border-radius: 8px;
       font-weight: 700;
-      text-decoration: none;
       font-size: 1.05rem;
-      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
+      text-decoration: none;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
       transition: all 0.15s ease;
     }
 
-    .btn-primary:hover {
+    .btn-main:hover {
       background-color: var(--primary-hover);
       transform: translateY(-1px);
     }
 
-    .btn-secondary {
+    .btn-sub {
       background-color: #f1f5f9;
       color: var(--text);
-      padding: 14px 28px;
+      padding: 14px 24px;
       border-radius: 8px;
       font-weight: 700;
-      text-decoration: none;
       font-size: 1.05rem;
+      text-decoration: none;
       transition: background 0.15s ease;
     }
 
-    .btn-secondary:hover {
+    .btn-sub:hover {
       background-color: #e2e8f0;
     }
 
     /* デモプレビュー枠 */
-    .preview-box {
-      max-width: 850px;
-      margin: 50px auto 80px;
+    .preview-container {
+      max-width: 820px;
+      margin: 40px auto 80px;
       padding: 0 24px;
     }
 
     .preview-window {
-      background-color: #ffffff;
+      background: #ffffff;
       border: 1px solid var(--border);
-      border-radius: 12px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      border-radius: var(--radius);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
       overflow: hidden;
     }
 
-    .window-header {
-      background-color: #f8fafc;
+    .window-top {
+      background: #f8fafc;
       padding: 12px 16px;
       border-bottom: 1px solid var(--border);
       display: flex;
+      align-items: center;
       gap: 6px;
     }
 
@@ -186,36 +206,36 @@
       height: 10px;
       border-radius: 50%;
     }
-    .dot-red { background: #ef4444; }
-    .dot-yellow { background: #f59e0b; }
-    .dot-green { background: #10b981; }
+    .dot-1 { background: #ef4444; }
+    .dot-2 { background: #f59e0b; }
+    .dot-3 { background: #10b981; }
 
-    .window-body {
-      padding: 24px;
+    .window-content {
       background: #f8fafc;
+      padding: 20px;
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
-    .demo-card {
+    .mock-card {
       background: #ffffff;
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 16px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      padding: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
     }
 
-    .demo-quote {
+    .mock-quote {
       background-color: #f8fafc;
       border-left: 3px solid var(--primary);
       padding: 8px 12px;
       font-size: 0.9rem;
+      border-radius: 0 6px 6px 0;
       margin-bottom: 8px;
-      border-radius: 0 4px 4px 0;
     }
 
-    .demo-summary {
+    .mock-summary {
       background-color: #f0fdf4;
       border: 1px solid #bbf7d0;
       color: #15803d;
@@ -223,10 +243,9 @@
       border-radius: 6px;
       font-size: 0.85rem;
       margin-bottom: 8px;
-      line-height: 1.5;
     }
 
-    .demo-note {
+    .mock-note {
       background-color: #fffbeb;
       border: 1px dashed #fde68a;
       color: #92400e;
@@ -236,30 +255,34 @@
     }
 
     /* フィーチャー一覧 */
-    .features {
-      background-color: var(--bg-alt);
+    .section-wrap {
       padding: 80px 24px;
+    }
+
+    .bg-light {
+      background-color: var(--bg-alt);
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     }
 
-    .section-header {
+    .section-title-wrap {
       text-align: center;
-      max-width: 650px;
+      max-width: 600px;
       margin: 0 auto 50px;
     }
 
-    .section-header h2 {
+    .section-title-wrap h2 {
       font-size: 2rem;
       font-weight: 800;
       margin-bottom: 12px;
     }
 
-    .section-header p {
+    .section-title-wrap p {
       color: var(--text-muted);
+      font-size: 1rem;
     }
 
-    .feature-grid {
+    .grid-3 {
       max-width: 1050px;
       margin: 0 auto;
       display: grid;
@@ -267,61 +290,54 @@
       gap: 24px;
     }
 
-    .feature-card {
+    .card-feature {
       background: var(--card-bg);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: var(--radius);
       padding: 24px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
     }
 
-    .feature-icon {
-      font-size: 1.8rem;
-      margin-bottom: 12px;
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 14px;
     }
 
-    .feature-card h3 {
+    .card-feature h3 {
       font-size: 1.15rem;
       font-weight: 700;
       margin-bottom: 8px;
     }
 
-    .feature-card p {
+    .card-feature p {
       color: var(--text-muted);
       font-size: 0.95rem;
-      line-height: 1.6;
     }
 
     /* 料金表 */
-    .pricing {
-      max-width: 1000px;
-      margin: 80px auto;
-      padding: 0 24px;
-    }
-
     .pricing-grid {
+      max-width: 980px;
+      margin: 0 auto;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 24px;
-      margin-top: 40px;
     }
 
-    .pricing-card {
+    .price-box {
       background: #ffffff;
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: var(--radius);
       padding: 30px;
       display: flex;
       flex-direction: column;
       position: relative;
     }
 
-    .pricing-card.featured {
+    .price-box.popular {
       border: 2px solid var(--primary);
       box-shadow: 0 8px 24px rgba(79, 70, 229, 0.12);
     }
 
-    .plan-badge-popular {
+    .popular-tag {
       position: absolute;
       top: -12px;
       right: 20px;
@@ -333,25 +349,25 @@
       border-radius: 12px;
     }
 
-    .plan-title {
+    .plan-name {
       font-size: 1.3rem;
       font-weight: 800;
       margin-bottom: 6px;
     }
 
-    .plan-price {
+    .plan-amount {
       font-size: 2.2rem;
       font-weight: 800;
       margin-bottom: 16px;
     }
 
-    .plan-price span {
+    .plan-amount span {
       font-size: 0.95rem;
       color: var(--text-muted);
       font-weight: normal;
     }
 
-    .plan-features-list {
+    .plan-list {
       list-style: none;
       margin: 20px 0 30px;
       display: flex;
@@ -361,7 +377,7 @@
       flex: 1;
     }
 
-    .plan-features-list li {
+    .plan-list li {
       display: flex;
       align-items: center;
       gap: 8px;
@@ -378,23 +394,34 @@
       transition: all 0.15s ease;
     }
 
-    .btn-plan-free {
-      background: #f1f5f9;
-      color: var(--text);
-    }
+    .btn-plan-free { background: #f1f5f9; color: var(--text); }
     .btn-plan-free:hover { background: #e2e8f0; }
 
-    .btn-plan-pro {
-      background: #e0e7ff;
-      color: var(--primary);
-    }
+    .btn-plan-pro { background: #e0e7ff; color: var(--primary); }
     .btn-plan-pro:hover { background: #c7d2fe; }
 
-    .btn-plan-premium {
-      background: var(--primary);
-      color: #ffffff;
-    }
+    .btn-plan-premium { background: var(--primary); color: #ffffff; }
     .btn-plan-premium:hover { background: var(--primary-hover); }
+
+    /* CocoaLab Studio について */
+    .about-lab {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 60px 24px;
+    }
+
+    .about-lab h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .about-lab p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
 
     /* フッター */
     footer {
@@ -406,122 +433,126 @@
     }
 
     @media (max-width: 640px) {
-      .hero h1 { font-size: 2.1rem; }
+      .hero h1 { font-size: 2.2rem; }
       .pricing-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ナビゲーション -->
-  <nav>
-    <div class="logo">
-      📦 ContextShelf
-    </div>
-    <div class="nav-links">
-      <a href="#features">機能</a>
-      <a href="#pricing">料金プラン</a>
-      <a href="https://chromewebstore.google.com" target="_blank" class="btn-cta-nav">Chromeに追加</a>
-    </div>
-  </nav>
-
-  <!-- ヒーロー -->
-  <header class="hero">
-    <div class="hero-badge">⚡ リサーチ・論文・記事執筆の作業効率を最大化</div>
-    <h1>Web上の知識を、<span>一瞬で資産に変える</span></h1>
-    <p>
-      テキスト選択＆ショートカット（Alt+S）で即保存。元の位置への正確なピンバック、Gemini 3.5 Flash-Liteによる高速要約、一言メモとMarkdownエクスポートをすべてブラウザ完結で。
-    </p>
-    <div class="hero-buttons">
-      <a href="https://chromewebstore.google.com" target="_blank" class="btn-primary">Chromeに追加（無料）</a>
-      <a href="#features" class="btn-secondary">主な機能を見る</a>
-    </div>
+  <!-- サイトヘッダー -->
+  <header class="site-header">
+    <nav>
+      <a href="#" class="brand-logo">
+        ☕ <span>CocoaLab</span>
+      </a>
+      <div class="nav-links">
+        <a href="#product">ContextShelf</a>
+        <a href="#features">機能</a>
+        <a href="#pricing">料金</a>
+        <a href="#about">About</a>
+        <a href="https://chromewebstore.google.com" target="_blank" class="btn-nav-action">Chromeに追加</a>
+      </div>
+    </nav>
   </header>
 
-  <!-- デモプレビュー -->
-  <section class="preview-box">
+  <!-- ヒーローセクション -->
+  <section id="product" class="hero">
+    <div class="badge">🚀 CocoaLab Product #1 &bull; v1.6.0 Released</div>
+    <h1>Web上の知識を、<br><span class="gradient">一瞬で資産に変える</span></h1>
+    <p>
+      テキスト選択＆<code>Alt + S</code>で即保存。DOMを壊さない場所ピン、Gemini 3.5 Flash-Liteによる高速AI要約、一言メモとMarkdownエクスポートをサイドパネル完結で。
+    </p>
+    <div class="hero-actions">
+      <a href="https://chromewebstore.google.com" target="_blank" class="btn-main">Chromeに追加（無料）</a>
+      <a href="#features" class="btn-sub">機能を詳しく見る</a>
+    </div>
+  </section>
+
+  <!-- プロダクトプレビュー -->
+  <div class="preview-container">
     <div class="preview-window">
-      <div class="window-header">
-        <div class="dot dot-red"></div>
-        <div class="dot dot-yellow"></div>
-        <div class="dot dot-green"></div>
+      <div class="window-top">
+        <div class="dot dot-1"></div>
+        <div class="dot dot-2"></div>
+        <div class="dot dot-3"></div>
       </div>
-      <div class="window-body">
-        <div class="demo-card">
+      <div class="window-content">
+        <div class="mock-card">
           <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 6px;">📁 開発ナレッジ &bull; 2026/08/23</div>
-          <div class="demo-quote">
-            「DOM非破壊設計により、Webページの構造を壊すことなくハイライトと位置特定を両立する。」
+          <div class="mock-quote">
+            「DOM非破壊設計により、Webページの構造を崩すことなくハイライトと位置特定を両立する。」
           </div>
-          <div class="demo-summary">
+          <div class="mock-summary">
             ✨ <b>Gemini要約</b>: DOM非破壊設計でWebページの表示崩れを防ぎ、安全な引用管理を実現。
           </div>
-          <div class="demo-note">
+          <div class="mock-note">
             💭 <b>Note</b>: 次期アーキテクチャの参考にする
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- 機能紹介 -->
-  <section id="features" class="features">
-    <div class="section-header">
-      <h2>ストレスゼロの研究・情報収集</h2>
-      <p>スクラップブックとAIの強みをブラウザサイドパネルに集約しました。</p>
+  <!-- 主な機能一覧 -->
+  <section id="features" class="section-wrap bg-light">
+    <div class="section-title-wrap">
+      <h2>研究・調査・執筆をスマートに</h2>
+      <p>スクラップブックと最新AIの強みをブラウザサイドパネルに集約しました。</p>
     </div>
 
-    <div class="feature-grid">
-      <div class="feature-card">
-        <div class="feature-icon">⚡</div>
+    <div class="grid-3">
+      <div class="card-feature">
+        <div class="card-icon">⚡</div>
         <h3>1秒で引用保存</h3>
-        <p>テキストを選択して <code>Alt + S</code> または右クリック。ページタイトル、URL、引用文をDOMを汚さずにサイドパネルへ即座に記録します。</p>
+        <p>テキストを選択して <code>Alt + S</code>。ページタイトル、URL、引用文をDOMを汚さずに即座に記録します。</p>
       </div>
 
-      <div class="feature-card">
-        <div class="feature-icon">📍</div>
+      <div class="card-feature">
+        <div class="card-icon">📍</div>
         <h3>場所ピン＆ジャンプ</h3>
-        <p>「📍場所」を押すと元のWebページの該当位置まで自動スクロールし、淡い赤色マーカーでハイライト。引用の前後文脈をいつでも確認できます。</p>
+        <p>「📍場所」を押すと元のWebページの該当位置まで自動スクロールし、淡い赤色マーカーでハイライト表示します。</p>
       </div>
 
-      <div class="feature-card">
-        <div class="feature-icon">✨</div>
+      <div class="card-feature">
+        <div class="card-icon">✨</div>
         <h3>Gemini 3.5 Flash-Lite要約</h3>
-        <p>長文引用もワンクリックで2〜3行の箇条書きに要約。最速・低コストなFlash-Liteモデルにより、ストレスのない即時レスポンスを実現。</p>
+        <p>長文引用もワンクリックで2〜3行の箇条書きに要約。最速・低コストなFlash-Liteモデルにより即時レスポンスを実現。</p>
       </div>
 
-      <div class="feature-card">
-        <div class="feature-icon">💭</div>
-        <h3>一言メモ＆直接編集</h3>
-        <p>引用ごとに「なぜ保存したか」の所感をメモ入力。さらに、引用テキストの不要な改行や余計な文字もその場で手軽に修正できます。</p>
+      <div class="card-feature">
+        <div class="card-icon">💭</div>
+        <h3>一言メモ＆テキスト編集</h3>
+        <p>引用ごとに「なぜ保存したか」の所感をメモ入力。引用文の不要な改行や余計な文字もその場で修正できます。</p>
       </div>
 
-      <div class="feature-card">
-        <div class="feature-icon">📁</div>
+      <div class="card-feature">
+        <div class="card-icon">📁</div>
         <h3>フォルダ＆タグ分類</h3>
-        <p>プロジェクト別のフォルダ振り分けや、<code>#重要</code> などのタグ付けに対応。キーワード検索時はヒット箇所が黄色くハイライトされます。</p>
+        <p>プロジェクト別のフォルダ分けや、<code>#重要</code> などのタグ付けに対応。キーワード検索時はヒット箇所が光ります。</p>
       </div>
 
-      <div class="feature-card">
-        <div class="feature-icon">📥</div>
+      <div class="card-feature">
+        <div class="card-icon">📥</div>
         <h3>Markdown / JSON 出力</h3>
-        <p>蓄積した引用とメモを一括でMarkdown形式でダウンロード。Text Fragmentリンク付きで外部エディタへもシームレスに引き継げます。</p>
+        <p>蓄積した引用とメモを一括でMarkdown形式でダウンロード。Text Fragmentリンク付きで外部へシームレスに引き継げます。</p>
       </div>
     </div>
   </section>
 
   <!-- 料金プラン -->
-  <section id="pricing" class="pricing">
-    <div class="section-header">
-      <h2>シンプルな料金プラン</h2>
+  <section id="pricing" class="section-wrap">
+    <div class="section-title-wrap">
+      <h2>シンプルな3段階プラン</h2>
       <p>まずは無料でスタート。必要に応じてプロフェッショナル向けプランへ。</p>
     </div>
 
     <div class="pricing-grid">
       <!-- Free -->
-      <div class="pricing-card">
-        <div class="plan-title">Free</div>
-        <div class="plan-price">$0 <span>/ 永久無料</span></div>
-        <ul class="plan-features-list">
+      <div class="price-box">
+        <div class="plan-name">Free</div>
+        <div class="plan-amount">$0 <span>/ 永久無料</span></div>
+        <ul class="plan-list">
           <li>✔ 保存件数 <b>最大30件</b></li>
           <li>✔ フォルダ作成 <b>2個まで</b></li>
           <li>✔ 一言メモ＆テキスト編集</li>
@@ -532,10 +563,10 @@
       </div>
 
       <!-- Pro (月額) -->
-      <div class="pricing-card">
-        <div class="plan-title">Pro</div>
-        <div class="plan-price">$4 <span>/ 月</span></div>
-        <ul class="plan-features-list">
+      <div class="price-box">
+        <div class="plan-name">Pro</div>
+        <div class="plan-amount">$4 <span>/ 月</span></div>
+        <ul class="plan-list">
           <li>✔ 保存件数 <b>無制限</b></li>
           <li>✔ フォルダ作成 <b>無制限</b></li>
           <li>✔ ✨ <b>Gemini AI要約 無制限</b></li>
@@ -546,11 +577,11 @@
       </div>
 
       <!-- Premium Pro (買い切り) -->
-      <div class="pricing-card featured">
-        <div class="plan-badge-popular">一番人気・買い切り</div>
-        <div class="plan-title">Premium Pro</div>
-        <div class="plan-price">$30 <span>/ 一生使い放題</span></div>
-        <ul class="plan-features-list">
+      <div class="price-box popular">
+        <div class="popular-tag">一番人気・買い切り</div>
+        <div class="plan-name">Premium Pro</div>
+        <div class="plan-amount">$30 <span>/ 一生使い放題</span></div>
+        <ul class="plan-list">
           <li>✔ <b>Proと全く同じ全機能</b></li>
           <li>✔ <b>追加の月額料金なし</b></li>
           <li>✔ 今後のアップデートも永久有効</li>
@@ -562,9 +593,18 @@
     </div>
   </section>
 
+  <!-- CocoaLab Studio について -->
+  <section id="about" class="about-lab">
+    <h2>About CocoaLab</h2>
+    <p>
+      CocoaLab は、「毎日のデジタル作業を1秒速く、10倍シンプルに」をミッションに掲げる個人開発スタジオです。<br>
+      肥大化した巨大ツールではなく、ブラウザ上で軽快に動き、ユーザーの手を止めない高品質なマイクロプロダクトを開発しています。
+    </p>
+  </section>
+
   <!-- フッター -->
   <footer>
-    <p>&copy; 2026 ContextShelf. All rights reserved.</p>
+    <p>&copy; 2026 CocoaLab. All rights reserved. &bull; Created by Cocoa</p>
   </footer>
 
 </body>
