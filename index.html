@@ -23,7 +23,6 @@
     body { font-family: var(--font); background-color: var(--bg); color: var(--text); line-height: 1.6; }
     .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 
-    /* Navigation Bar */
     nav {
       position: sticky;
       top: 0;
@@ -89,23 +88,20 @@
     .mobile-menu.active { display: flex; }
     .mobile-menu a { color: var(--text); text-decoration: none; font-size: 16px; font-weight: 500; }
 
-    /* Header */
     header { padding: 90px 0 60px; text-align: center; border-bottom: 1px solid var(--border); }
     .badge { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--primary); background: rgba(56, 189, 248, 0.1); padding: 4px 12px; border-radius: 999px; margin-bottom: 16px; border: 1px solid rgba(56, 189, 248, 0.2); }
     h1 { font-size: 38px; font-weight: 800; margin-bottom: 16px; line-height: 1.2; }
     .hero-p { color: var(--text-muted); font-size: 16px; max-width: 600px; margin: 0 auto; }
 
-    /* Sections */
     section { padding: 70px 0; border-bottom: 1px solid var(--border); }
     h2 { font-size: 24px; margin-bottom: 32px; display: flex; align-items: center; gap: 10px; }
     h2::before { content: ""; display: block; width: 4px; height: 20px; background: var(--primary); border-radius: 2px; }
 
-    /* Grid & Cards */
     .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
     .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
     .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; }
     .card-pro { border-color: var(--primary); }
-    .card-lifetime { border-color: var(--accent); }
+    .card-premium { border-color: var(--accent); }
 
     .tag { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; }
     .card-title { font-size: 18px; margin-bottom: 10px; }
@@ -117,12 +113,11 @@
     
     .btn { display: inline-block; text-align: center; background: var(--primary); color: #0b0f19; font-weight: 700; padding: 10px 18px; border-radius: 6px; text-decoration: none; font-size: 13px; cursor: pointer; border: none; }
     .btn:hover { background: var(--primary-hover); }
-    .btn-lifetime { background: var(--accent); color: #0b0f19; }
-    .btn-lifetime:hover { background: #d97706; }
+    .btn-premium { background: var(--accent); color: #0b0f19; }
+    .btn-premium:hover { background: #d97706; }
     .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
     .btn-secondary:hover { background: var(--card); }
 
-    /* Tables */
     table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--card); border-radius: 8px; border: 1px solid var(--border); }
     th, td { padding: 14px 16px; border-bottom: 1px solid var(--border); text-align: left; }
     th { width: 28%; color: var(--text-muted); background: rgba(0,0,0,0.2); font-weight: 600; }
@@ -235,7 +230,7 @@
         <div class="card card-pro">
           <div>
             <div class="tag">Subscription</div>
-            <h3 class="card-title" data-i18n="plan_pro_title">PRO 月額</h3>
+            <h3 class="card-title" data-i18n="plan_pro_title">PRO プラン（月額）</h3>
             <p class="card-desc" data-i18n="plan_pro_desc">手軽にフル機能を試したい方向け。</p>
             <div class="price-num">¥500 <span style="font-size: 13px; color: var(--text-muted); font-weight: normal;">/ month</span></div>
             <ul class="check-list">
@@ -247,20 +242,20 @@
           <button class="btn" style="width: 100%;" data-i18n="plan_upgrade_btn">拡張機能内から購入</button>
         </div>
 
-        <!-- Lifetime Deal -->
-        <div class="card card-lifetime">
+        <!-- Premium Lifetime -->
+        <div class="card card-premium">
           <div>
-            <div class="tag" style="color: var(--accent);">Best Value</div>
-            <h3 class="card-title" data-i18n="plan_ltd_title">Lifetime 買い切り</h3>
-            <p class="card-desc" data-i18n="plan_ltd_desc">一度の支払いで永久に利用可能な限定ライセンス。</p>
+            <div class="tag" style="color: var(--accent);">Lifetime Access</div>
+            <h3 class="card-title" data-i18n="plan_premium_title">Premium プラン（買い切り）</h3>
+            <p class="card-desc" data-i18n="plan_premium_desc">一度の支払いで永久に利用可能な限定ライセンス。</p>
             <div class="price-num">$30 <span style="font-size: 13px; color: var(--text-muted); font-weight: normal;">/ one-time</span></div>
             <ul class="check-list">
               <li data-i18n="plan_common_f1">無制限の保存実行</li>
               <li data-i18n="plan_common_f2">優先バグ修正・アップデート</li>
-              <li data-i18n="plan_ltd_f3">永久利用可能（月額請求なし）</li>
+              <li data-i18n="plan_premium_f3">永久利用可能（月額請求なし）</li>
             </ul>
           </div>
-          <button class="btn btn-lifetime" style="width: 100%;" data-i18n="plan_upgrade_btn">拡張機能内から購入</button>
+          <button class="btn btn-premium" style="width: 100%;" data-i18n="plan_upgrade_btn">拡張機能内から購入</button>
         </div>
       </div>
     </section>
@@ -299,7 +294,7 @@
         </tr>
         <tr>
           <th data-i18n="tbl_price">販売価格</th>
-          <td data-i18n="tbl_price_val">PRO月額プラン: 500円/月、Lifetime買い切りプラン: $30（一括払い）</td>
+          <td data-i18n="tbl_price_val">PROプラン: 500円/月（税込）、Premiumプラン: $30（一括払い）</td>
         </tr>
         <tr>
           <th data-i18n="tbl_payment">支払方法・時期</th>
@@ -307,7 +302,7 @@
         </tr>
         <tr>
           <th data-i18n="tbl_cancel">解約・返金ポリシー</th>
-          <td data-i18n="tbl_cancel_val">サブスクリプションはいつでも拡張機能内より解約可能。買い切りライセンスは即時有効化されます。デジタルコンテンツの性質上、決済後の返金には応じかねます。</td>
+          <td data-i18n="tbl_cancel_val">PROプランはいつでも拡張機能内より解約可能。Premiumプランは即時有効化されます。デジタルコンテンツの性質上、決済後の返金には応じかねます。</td>
         </tr>
       </table>
     </section>
@@ -345,14 +340,14 @@
         plan_free_f1: "月間 20 回までの保存",
         plan_free_f2: "全標準機能の利用",
         plan_free_btn: "標準プラン",
-        plan_pro_title: "PRO 月額",
+        plan_pro_title: "PRO プラン（月額）",
         plan_pro_desc: "手軽にフル機能を試したい方向け。",
         plan_common_f1: "無制限の保存実行",
         plan_common_f2: "優先バグ修正・アップデート",
         plan_pro_f3: "いつでも即時解約可能",
-        plan_ltd_title: "Lifetime 買い切り",
-        plan_ltd_desc: "一度の支払いで永久に利用可能な限定ライセンス。",
-        plan_ltd_f3: "永久利用可能（月額請求なし）",
+        plan_premium_title: "Premium プラン（買い切り）",
+        plan_premium_desc: "一度の支払いで永久に利用可能な限定ライセンス。",
+        plan_premium_f3: "永久利用可能（月額請求なし）",
         plan_upgrade_btn: "拡張機能内から購入",
         sec_about: "About & Philosophy",
         about_p1: "Cocoa Labs は、独立系エンジニアによって設立されたソフトウェア開発スタジオです。ブラウザ環境における自動化、API統合、およびワークフロー効率化に特化し、最小限の操作で最大限の成果を生み出すツールを設計・提供しています。",
@@ -363,11 +358,11 @@
         tbl_owner_val: "Cocoa Labs 運営責任者（請求があった場合は遅滞なく開示いたします）",
         tbl_contact: "連絡先メールアドレス",
         tbl_price: "販売価格",
-        tbl_price_val: "PRO月額プラン: 500円/月、Lifetime買い切りプラン: $30（一括払い）",
+        tbl_price_val: "PROプラン: 500円/月（税込）、Premiumプラン: $30（一括払い）",
         tbl_payment: "支払方法・時期",
         tbl_payment_val: "クレジットカード（Stripe / ExtensionPay） / 登録時即時決済",
         tbl_cancel: "解約・返金ポリシー",
-        tbl_cancel_val: "サブスクリプションはいつでも拡張機能内より解約可能。買い切りライセンスは即時有効化されます。デジタルコンテンツの性質上、決済後の返金には応じかねます。"
+        tbl_cancel_val: "PROプランはいつでも拡張機能内より解約可能。Premiumプランは即時有効化されます。デジタルコンテンツの性質上、決済後の返金には応じかねます。"
       },
       en: {
         nav_products: "Products",
@@ -393,14 +388,14 @@
         plan_free_f1: "Up to 20 saves per month",
         plan_free_f2: "All core extraction features included",
         plan_free_btn: "Default Plan",
-        plan_pro_title: "Monthly PRO",
+        plan_pro_title: "PRO Plan (Monthly)",
         plan_pro_desc: "For flexible short-term full feature access.",
         plan_common_f1: "Unlimited saves & clipping",
         plan_common_f2: "Priority bug fixes & updates",
         plan_pro_f3: "Cancel anytime with one click",
-        plan_ltd_title: "Lifetime Access",
-        plan_ltd_desc: "Pay once, access all current and future features forever.",
-        plan_ltd_f3: "Lifetime access (No recurring fees)",
+        plan_premium_title: "Premium Plan (Lifetime)",
+        plan_premium_desc: "Pay once, access all current and future features forever.",
+        plan_premium_f3: "Lifetime access (No recurring fees)",
         plan_upgrade_btn: "Purchase in Extension",
         sec_about: "About & Philosophy",
         about_p1: "Cocoa Labs is an independent software studio. We specialize in browser automation, API integrations, and workflow optimizations.",
@@ -411,11 +406,11 @@
         tbl_owner_val: "Cocoa Labs Management (Disclosed upon formal request)",
         tbl_contact: "Contact Email",
         tbl_price: "Pricing",
-        tbl_price_val: "PRO Monthly: ¥500/mo, Lifetime: $30 (One-time payment)",
+        tbl_price_val: "PRO Plan: ¥500/mo, Premium Plan: $30 (One-time payment)",
         tbl_payment: "Payment Method",
         tbl_payment_val: "Credit Card (Stripe / ExtensionPay) / Immediate",
         tbl_cancel: "Cancellation Policy",
-        tbl_cancel_val: "Subscriptions can be cancelled anytime. Lifetime licenses activate immediately. No refunds for digital products."
+        tbl_cancel_val: "PRO Plan subscriptions can be cancelled anytime. Premium Plan activates immediately. No refunds for digital products."
       }
     };
 
