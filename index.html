@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CocoaLab - Crafting Micro-Tools & ContextShelf</title>
-  <meta name="description" content="CocoaLab - 個人開発によるシンプルで強力なWeb生産性ツールの開発スタジオ。代表作「ContextShelf」を提供中。">
+  <title>CocoaLab - Micro Tools & Digital Craftsmanship</title>
+  <meta name="description" content="CocoaLab - 日常のデジタル作業をより速く、シンプルにするプロダクトスタジオ。代表作「ContextShelf」を提供中。">
   <style>
     :root {
       --primary: #4f46e5;
@@ -25,20 +25,24 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       background-color: var(--bg);
       color: var(--text);
       line-height: 1.6;
     }
 
-    /* ナビゲーション */
+    /* ナビゲーションバー */
     header.site-header {
       position: sticky;
       top: 0;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--border);
-      z-index: 100;
+      z-index: 1000;
     }
 
     nav {
@@ -66,13 +70,14 @@
       -webkit-text-fill-color: transparent;
     }
 
-    .nav-links {
+    /* デスクトップメニュー */
+    .desktop-nav {
       display: flex;
       gap: 24px;
       align-items: center;
     }
 
-    .nav-links a {
+    .desktop-nav a {
       color: var(--text-muted);
       text-decoration: none;
       font-size: 0.95rem;
@@ -80,11 +85,11 @@
       transition: color 0.15s;
     }
 
-    .nav-links a:hover {
+    .desktop-nav a:hover {
       color: var(--primary);
     }
 
-    .btn-nav-action {
+    .btn-nav-cta {
       background-color: var(--primary);
       color: #ffffff !important;
       padding: 8px 16px;
@@ -92,14 +97,80 @@
       transition: background 0.15s !important;
     }
 
-    .btn-nav-action:hover {
+    .btn-nav-cta:hover {
       background-color: var(--primary-hover) !important;
+    }
+
+    /* ハンバーガーアイコン（3本線） */
+    .hamburger-btn {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      flex-direction: column;
+      gap: 5px;
+      z-index: 1001;
+    }
+
+    .hamburger-btn span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background-color: var(--text);
+      border-radius: 2px;
+      transition: all 0.25s ease;
+    }
+
+    /* モバイルドロワーメニュー */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.4);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 1050;
+    }
+
+    .drawer-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer-menu {
+      position: fixed;
+      top: 0;
+      right: -280px;
+      width: 280px;
+      height: 100vh;
+      background: #ffffff;
+      padding: 70px 24px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+      transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1100;
+    }
+
+    .drawer-menu.active {
+      right: 0;
+    }
+
+    .drawer-menu a {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
     }
 
     /* ヒーローセクション */
     .hero {
       max-width: 880px;
-      margin: 70px auto 40px;
+      margin: 60px auto 30px;
       text-align: center;
       padding: 0 24px;
     }
@@ -254,7 +325,7 @@
       font-size: 0.85rem;
     }
 
-    /* フィーチャー一覧 */
+    /* 共通セクション */
     .section-wrap {
       padding: 80px 24px;
     }
@@ -267,7 +338,7 @@
 
     .section-title-wrap {
       text-align: center;
-      max-width: 600px;
+      max-width: 650px;
       margin: 0 auto 50px;
     }
 
@@ -282,6 +353,54 @@
       font-size: 1rem;
     }
 
+    /* プロダクト一覧（Products） */
+    .products-grid {
+      max-width: 1050px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .product-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .product-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .product-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+
+    .product-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: #e0e7ff;
+      color: var(--primary);
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+
+    .product-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+
+    /* 機能グリッド */
     .grid-3 {
       max-width: 1050px;
       margin: 0 auto;
@@ -403,24 +522,43 @@
     .btn-plan-premium { background: var(--primary); color: #ffffff; }
     .btn-plan-premium:hover { background: var(--primary-hover); }
 
-    /* CocoaLab Studio について */
-    .about-lab {
+    /* CocoaLab Studio & Creator */
+    .about-section {
       max-width: 800px;
       margin: 0 auto;
       text-align: center;
-      padding: 60px 24px;
     }
 
-    .about-lab h2 {
-      font-size: 1.8rem;
-      font-weight: 800;
+    .creator-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #e0e7ff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
       margin-bottom: 16px;
     }
 
-    .about-lab p {
+    .about-section h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .creator-role {
+      font-size: 1rem;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .about-section p {
       color: var(--text-muted);
       font-size: 1.05rem;
       line-height: 1.8;
+      margin-bottom: 24px;
     }
 
     /* フッター */
@@ -432,7 +570,10 @@
       font-size: 0.9rem;
     }
 
-    @media (max-width: 640px) {
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .desktop-nav { display: none; }
+      .hamburger-btn { display: flex; }
       .hero h1 { font-size: 2.2rem; }
       .pricing-grid { grid-template-columns: 1fr; }
     }
@@ -446,30 +587,50 @@
       <a href="#" class="brand-logo">
         ☕ <span>CocoaLab</span>
       </a>
-      <div class="nav-links">
-        <a href="#product">ContextShelf</a>
-        <a href="#features">機能</a>
-        <a href="#pricing">料金</a>
-        <a href="#about">About</a>
-        <a href="https://chromewebstore.google.com" target="_blank" class="btn-nav-action">Chromeに追加</a>
+
+      <!-- デスクトップナビ -->
+      <div class="desktop-nav">
+        <a href="#products">プロダクト</a>
+        <a href="#features">ContextShelf機能</a>
+        <a href="#pricing">料金プラン</a>
+        <a href="#about">About Studio</a>
+        <a href="https://chromewebstore.google.com" target="_blank" class="btn-nav-cta">Chromeに追加</a>
       </div>
+
+      <!-- モバイル用ハンバーガー（3本線） -->
+      <button id="hamburger-btn" class="hamburger-btn" aria-label="メニューを開く">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </nav>
   </header>
 
+  <!-- ドロワーメニュー -->
+  <div id="drawer-overlay" class="drawer-overlay"></div>
+  <aside id="drawer-menu" class="drawer-menu">
+    <div style="font-size: 1.1rem; font-weight: 800; margin-bottom: 10px;">Menu</div>
+    <a href="#products" class="drawer-link">📦 開発プロダクト</a>
+    <a href="#features" class="drawer-link">⚡ ContextShelf 機能</a>
+    <a href="#pricing" class="drawer-link">💳 料金プラン</a>
+    <a href="#about" class="drawer-link">☕ CocoaLab について</a>
+    <a href="https://chromewebstore.google.com" target="_blank" style="color: var(--primary); font-weight: 800;">⬇️ Chromeに追加</a>
+  </aside>
+
   <!-- ヒーローセクション -->
-  <section id="product" class="hero">
-    <div class="badge">🚀 CocoaLab Product #1 &bull; v1.6.0 Released</div>
+  <section class="hero">
+    <div class="badge">🚀 CocoaLab Flagship Product &bull; v1.6.0</div>
     <h1>Web上の知識を、<br><span class="gradient">一瞬で資産に変える</span></h1>
     <p>
       テキスト選択＆<code>Alt + S</code>で即保存。DOMを壊さない場所ピン、Gemini 3.5 Flash-Liteによる高速AI要約、一言メモとMarkdownエクスポートをサイドパネル完結で。
     </p>
     <div class="hero-actions">
       <a href="https://chromewebstore.google.com" target="_blank" class="btn-main">Chromeに追加（無料）</a>
-      <a href="#features" class="btn-sub">機能を詳しく見る</a>
+      <a href="#features" class="btn-sub">主な機能を見る</a>
     </div>
   </section>
 
-  <!-- プロダクトプレビュー -->
+  <!-- デモプレビュー -->
   <div class="preview-container">
     <div class="preview-window">
       <div class="window-top">
@@ -481,7 +642,7 @@
         <div class="mock-card">
           <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 6px;">📁 開発ナレッジ &bull; 2026/08/23</div>
           <div class="mock-quote">
-            「DOM非破壊設計により、Webページの構造を崩すことなくハイライトと位置特定を両立する。」
+            「DOM非破壊設計により、Webページの構造を壊すことなくハイライトと位置特定を両立する。」
           </div>
           <div class="mock-summary">
             ✨ <b>Gemini要約</b>: DOM非破壊設計でWebページの表示崩れを防ぎ、安全な引用管理を実現。
@@ -494,10 +655,48 @@
     </div>
   </div>
 
-  <!-- 主な機能一覧 -->
-  <section id="features" class="section-wrap bg-light">
+  <!-- 開発プロダクト一覧 (Products) -->
+  <section id="products" class="section-wrap bg-light">
     <div class="section-title-wrap">
-      <h2>研究・調査・執筆をスマートに</h2>
+      <h2>Products by CocoaLab</h2>
+      <p>日常の作業効率を10倍にするマイクロツールを開発・運営しています。</p>
+    </div>
+
+    <div class="products-grid">
+      <!-- Product 1: ContextShelf -->
+      <div class="product-card">
+        <div>
+          <div class="product-header">
+            <h3 class="product-title">ContextShelf</h3>
+            <span class="product-tag">Active &bull; Flagship</span>
+          </div>
+          <p class="product-desc">
+            Web引用・調査メモを1秒で収集し、Gemini 3.5 Flash-Liteで要約・整理するブラウザ拡張機能。研究者・エンジニア・ライターに最適。
+          </p>
+        </div>
+        <a href="https://chromewebstore.google.com" target="_blank" class="btn-main" style="text-align: center; font-size: 0.95rem; padding: 10px;">今すぐ利用する</a>
+      </div>
+
+      <!-- Product 2: Upcoming Micro Tool -->
+      <div class="product-card">
+        <div>
+          <div class="product-header">
+            <h3 class="product-title">Markdown Hub</h3>
+            <span class="product-tag" style="background:#f1f5f9; color:#64748b;">In Development</span>
+          </div>
+          <p class="product-desc">
+            ブラウザ上のあらゆるテキストをワンクリックで整形・Markdown構文へ変換する超軽量ユーティリティ。
+          </p>
+        </div>
+        <button disabled class="btn-sub" style="opacity: 0.6; cursor: not-allowed; font-size: 0.95rem; padding: 10px;">近日公開予定</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ContextShelf 主要機能 -->
+  <section id="features" class="section-wrap">
+    <div class="section-title-wrap">
+      <h2>ストレスゼロの研究・情報収集</h2>
       <p>スクラップブックと最新AIの強みをブラウザサイドパネルに集約しました。</p>
     </div>
 
@@ -541,7 +740,7 @@
   </section>
 
   <!-- 料金プラン -->
-  <section id="pricing" class="section-wrap">
+  <section id="pricing" class="section-wrap bg-light">
     <div class="section-title-wrap">
       <h2>シンプルな3段階プラン</h2>
       <p>まずは無料でスタート。必要に応じてプロフェッショナル向けプランへ。</p>
@@ -593,19 +792,45 @@
     </div>
   </section>
 
-  <!-- CocoaLab Studio について -->
-  <section id="about" class="about-lab">
-    <h2>About CocoaLab</h2>
-    <p>
-      CocoaLab は、「毎日のデジタル作業を1秒速く、10倍シンプルに」をミッションに掲げる個人開発スタジオです。<br>
-      肥大化した巨大ツールではなく、ブラウザ上で軽快に動き、ユーザーの手を止めない高品質なマイクロプロダクトを開発しています。
-    </p>
+  <!-- CocoaLab Studio & 開発者について -->
+  <section id="about" class="section-wrap">
+    <div class="about-section">
+      <div class="creator-avatar">☕</div>
+      <h2>About CocoaLab</h2>
+      <div class="creator-role">Indie Micro Studio &bull; Founded by Cocoa</div>
+      <p>
+        CocoaLab（ココアラボ）は、「毎日のデジタル作業を1秒速く、10倍シンプルに」を掲げるインディー開発スタジオです。<br>
+        機能が肥大化した重いツールではなく、ブラウザ上で軽快に動き、思考を妨げない高品質なマイクロツールを企画・開発・運営しています。
+      </p>
+      <div style="font-size: 0.9rem; color: #94a3b8;">
+        Built with clean code, zero trackers, and browser-native technologies.
+      </div>
+    </div>
   </section>
 
   <!-- フッター -->
   <footer>
-    <p>&copy; 2026 CocoaLab. All rights reserved. &bull; Created by Cocoa</p>
+    <p>&copy; 2026 CocoaLab. All rights reserved. &bull; Crafted by Cocoa</p>
   </footer>
+
+  <!-- ドロワーメニュー開閉スクリプト -->
+  <script>
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const drawerMenu = document.getElementById('drawer-menu');
+    const drawerOverlay = document.getElementById('drawer-overlay');
+    const drawerLinks = document.querySelectorAll('.drawer-link');
+
+    function toggleMenu() {
+      drawerMenu.classList.toggle('active');
+      drawerOverlay.classList.toggle('active');
+    }
+
+    hamburgerBtn.addEventListener('click', toggleMenu);
+    drawerOverlay.addEventListener('click', toggleMenu);
+    drawerLinks.forEach(link => {
+      link.addEventListener('click', toggleMenu);
+    });
+  </script>
 
 </body>
 </html>
