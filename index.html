@@ -109,7 +109,11 @@
     .check-list { list-style: none; font-size: 13px; margin-bottom: 20px; }
     .check-list li { margin-bottom: 8px; padding-left: 18px; position: relative; }
     .check-list li::before { content: "✓"; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
-    .price-num { font-size: 24px; font-weight: 800; margin: 12px 0; }
+    
+    .price-box { margin: 12px 0; min-height: 58px; }
+    .price-num { font-size: 24px; font-weight: 800; }
+    .price-sub { font-size: 13px; color: var(--text-muted); font-weight: normal; }
+    .price-note { font-size: 11px; color: var(--accent); display: block; margin-top: 4px; line-height: 1.3; }
     
     .btn { display: inline-block; text-align: center; background: var(--primary); color: #0b0f19; font-weight: 700; padding: 10px 18px; border-radius: 6px; text-decoration: none; font-size: 13px; cursor: pointer; border: none; }
     .btn:hover { background: var(--primary-hover); }
@@ -217,7 +221,9 @@
           <div>
             <h3 class="card-title" data-i18n="plan_free_title">Free プラン</h3>
             <p class="card-desc" data-i18n="plan_free_desc">基本的な動作検証やライトユーザー向け。</p>
-            <div class="price-num">¥0 <span style="font-size: 13px; color: var(--text-muted); font-weight: normal;">/ month</span></div>
+            <div class="price-box" data-i18n="plan_free_price">
+              <span class="price-num">¥0</span> <span class="price-sub">/ 月</span>
+            </div>
             <ul class="check-list">
               <li data-i18n="plan_free_f1">月間 20 回までの保存</li>
               <li data-i18n="plan_free_f2">全標準機能の利用</li>
@@ -232,7 +238,10 @@
             <div class="tag">Subscription</div>
             <h3 class="card-title" data-i18n="plan_pro_title">PRO プラン（月額）</h3>
             <p class="card-desc" data-i18n="plan_pro_desc">手軽にフル機能を試したい方向け。</p>
-            <div class="price-num">¥500 <span style="font-size: 13px; color: var(--text-muted); font-weight: normal;">/ month</span></div>
+            <div class="price-box" data-i18n="plan_pro_price">
+              <span class="price-num">約 ¥600</span> <span class="price-sub">/ 月</span>
+              <span class="price-note">※$4/月（1ドル＝150円換算時）</span>
+            </div>
             <ul class="check-list">
               <li data-i18n="plan_common_f1">無制限の保存実行</li>
               <li data-i18n="plan_common_f2">優先バグ修正・アップデート</li>
@@ -248,7 +257,10 @@
             <div class="tag" style="color: var(--accent);">Lifetime Access</div>
             <h3 class="card-title" data-i18n="plan_premium_title">Premium プラン（買い切り）</h3>
             <p class="card-desc" data-i18n="plan_premium_desc">一度の支払いで永久に利用可能な限定ライセンス。</p>
-            <div class="price-num">$30 <span style="font-size: 13px; color: var(--text-muted); font-weight: normal;">/ one-time</span></div>
+            <div class="price-box" data-i18n="plan_premium_price">
+              <span class="price-num">約 ¥4,500</span> <span class="price-sub">/ 買い切り</span>
+              <span class="price-note">※$30一括決済（1ドル＝150円換算時）</span>
+            </div>
             <ul class="check-list">
               <li data-i18n="plan_common_f1">無制限の保存実行</li>
               <li data-i18n="plan_common_f2">優先バグ修正・アップデート</li>
@@ -294,7 +306,7 @@
         </tr>
         <tr>
           <th data-i18n="tbl_price">販売価格</th>
-          <td data-i18n="tbl_price_val">PROプラン: 500円/月（税込）、Premiumプラン: $30（一括払い）</td>
+          <td data-i18n="tbl_price_val">PROプラン: $4/月（約600円 ※1ドル150円換算時）、Premiumプラン: $30（約4,500円 ※1ドル150円換算時 / 一括払い）</td>
         </tr>
         <tr>
           <th data-i18n="tbl_payment">支払方法・時期</th>
@@ -337,16 +349,19 @@
         sec_pricing: "Pricing Plans",
         plan_free_title: "Free プラン",
         plan_free_desc: "基本的な動作検証やライトユーザー向け。",
+        plan_free_price: '<span class="price-num">¥0</span> <span class="price-sub">/ 月</span>',
         plan_free_f1: "月間 20 回までの保存",
         plan_free_f2: "全標準機能の利用",
         plan_free_btn: "標準プラン",
         plan_pro_title: "PRO プラン（月額）",
         plan_pro_desc: "手軽にフル機能を試したい方向け。",
+        plan_pro_price: '<span class="price-num">約 ¥600</span> <span class="price-sub">/ 月</span><span class="price-note">※$4/月（1ドル＝150円換算時）</span>',
         plan_common_f1: "無制限の保存実行",
         plan_common_f2: "優先バグ修正・アップデート",
         plan_pro_f3: "いつでも即時解約可能",
         plan_premium_title: "Premium プラン（買い切り）",
         plan_premium_desc: "一度の支払いで永久に利用可能な限定ライセンス。",
+        plan_premium_price: '<span class="price-num">約 ¥4,500</span> <span class="price-sub">/ 買い切り</span><span class="price-note">※$30一括決済（1ドル＝150円換算時）</span>',
         plan_premium_f3: "永久利用可能（月額請求なし）",
         plan_upgrade_btn: "拡張機能内から購入",
         sec_about: "About & Philosophy",
@@ -358,7 +373,7 @@
         tbl_owner_val: "Cocoa Labs 運営責任者（請求があった場合は遅滞なく開示いたします）",
         tbl_contact: "連絡先メールアドレス",
         tbl_price: "販売価格",
-        tbl_price_val: "PROプラン: 500円/月（税込）、Premiumプラン: $30（一括払い）",
+        tbl_price_val: "PROプラン: $4/月（約600円 ※1ドル150円換算時）、Premiumプラン: $30（約4,500円 ※1ドル150円換算時 / 一括払い）",
         tbl_payment: "支払方法・時期",
         tbl_payment_val: "クレジットカード（Stripe / ExtensionPay） / 登録時即時決済",
         tbl_cancel: "解約・返金ポリシー",
@@ -385,16 +400,19 @@
         sec_pricing: "Pricing Plans",
         plan_free_title: "Free Plan",
         plan_free_desc: "For basic evaluation and casual clipping.",
+        plan_free_price: '<span class="price-num">$0</span> <span class="price-sub">/ month</span>',
         plan_free_f1: "Up to 20 saves per month",
         plan_free_f2: "All core extraction features included",
         plan_free_btn: "Default Plan",
         plan_pro_title: "PRO Plan (Monthly)",
         plan_pro_desc: "For flexible short-term full feature access.",
+        plan_pro_price: '<span class="price-num">$4</span> <span class="price-sub">/ month</span>',
         plan_common_f1: "Unlimited saves & clipping",
         plan_common_f2: "Priority bug fixes & updates",
         plan_pro_f3: "Cancel anytime with one click",
         plan_premium_title: "Premium Plan (Lifetime)",
         plan_premium_desc: "Pay once, access all current and future features forever.",
+        plan_premium_price: '<span class="price-num">$30</span> <span class="price-sub">/ one-time</span>',
         plan_premium_f3: "Lifetime access (No recurring fees)",
         plan_upgrade_btn: "Purchase in Extension",
         sec_about: "About & Philosophy",
@@ -406,7 +424,7 @@
         tbl_owner_val: "Cocoa Labs Management (Disclosed upon formal request)",
         tbl_contact: "Contact Email",
         tbl_price: "Pricing",
-        tbl_price_val: "PRO Plan: ¥500/mo, Premium Plan: $30 (One-time payment)",
+        tbl_price_val: "PRO Plan: $4/month, Premium Plan: $30 (One-time payment)",
         tbl_payment: "Payment Method",
         tbl_payment_val: "Credit Card (Stripe / ExtensionPay) / Immediate",
         tbl_cancel: "Cancellation Policy",
