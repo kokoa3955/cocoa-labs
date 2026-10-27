@@ -31,3 +31,7 @@ function timerPause(){const t=s.timer;if(!t.running)return;t.elapsed=clockMs();t
 function timerReset(){s.timer=defaults().timer;persist()}
 function timerFinish(){const t=s.timer,m=Math.round(clockMs()/60000);if(m<1||m>1440){C.toast('1分〜24時間で記録してください');return}if(!C.DATES.includes(t.date)){C.toast('テスト期間外のため手動で記録してください');return}const id=C.addLog(t.date,t.subject,m);if(!id)return;if(t.note)s.notes[id]=t.note;s.timer=defaults().timer;persist();C.toast(fmt(m)+'を記録しました')}
 function streak(){let longest=0,run=0;for(const d of C.DATES){if(dayGoal(d)>0&&inDay(d)>=dayGoal(d)){run++;longest=Math.max(longest,run)}else run=0}return longest}
+window.studyExtras={C,get s(){return s},today,fmt,total,inDay,inSubject,standard,dayGoal,forecast,html,persist,backupSoon,restoreBackup,timerStart,timerPause,timerReset,timerFinish,clockMs,streak,restore,reset,snapshot};
+window.studylogFeatures={restore,reset};
+window.studylogBackup=backupSoon;
+})();
