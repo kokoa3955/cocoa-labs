@@ -1,4 +1,4 @@
-const CACHE_NAME="studylog-nov28-v4";
+const CACHE_NAME="studylog-nov28-v5";
 const ASSETS=["./","./index.html","./manifest.webmanifest","./icon.svg","./extras.css","./features-core.js","./features-ui.js","./feature-timer-draw.js","./feature-prediction.js","./feature-calendar.js","./feature-bars.js","./feature-weeks.js","./feature-months.js","./feature-levels.js","./feature-badges.js","./feature-rewards.js","./feature-circle.js","./feature-history-display.js","./feature-events-tabs.js","./feature-events-timer.js","./feature-events-day.js","./feature-events-reward.js","./feature-history-editor.js","./feature-history-save.js","./feature-export.js","./feature-init.js","./pomodoro.js"];
 self.addEventListener("install",event=>{event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()))});
 self.addEventListener("activate",event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith("studylog-nov28-")&&key!==CACHE_NAME).map(key=>caches.delete(key)))).then(()=>self.clients.claim()))});
