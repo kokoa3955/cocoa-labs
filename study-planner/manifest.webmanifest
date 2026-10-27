@@ -1,0 +1,19 @@
+{
+  "name": "勉強ログ — 11/28 テストまで",
+  "short_name": "勉強ログ",
+  "description": "自由に科目を選んで、勉強した時間だけ残り時間が減る学習記録アプリ",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f9fd",
+  "theme_color": "#f7f9fd",
+  "lang": "ja",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
