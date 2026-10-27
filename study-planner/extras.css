@@ -64,3 +64,23 @@
 #extra-note-input{margin:13px 0 0}
 @media(min-width:850px){.extra-layout{display:grid;grid-template-columns:1fr 1fr;gap:16px}.extra-chart-col span{font-size:11px}}
 @media(max-width:420px){.extra-cols{grid-template-columns:1fr}.extra-kpi strong{font-size:23px}.extra-tab{font-size:12px}}
+
+/* Pomodoro countdown */
+.pom-setup{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0 9px}
+.pom-setup .extra-field,.pom-setup input{min-width:0}
+.pom-setup .extra-field>span{display:block;font-size:11px;color:var(--muted);font-weight:800;margin-bottom:5px}
+#pom-panel .extra-cols .extra-field>span{display:block;color:var(--muted);font-size:12px;font-weight:750;margin-bottom:6px}
+.pom-options{display:flex;flex-wrap:wrap;gap:11px 16px;margin:11px 0 16px}
+.pom-options label{font-size:12px;font-weight:750;display:inline-flex;align-items:center;gap:6px;color:#4c5b79}
+.pom-options input{accent-color:var(--blue);width:16px;height:16px}
+.pom-dial{width:min(265px,78vw);aspect-ratio:1;margin:18px auto 19px;border-radius:50%;padding:12px;display:grid;place-items:center;box-shadow:0 14px 36px #4159a426;transition:background .2s ease}
+.pom-inner{width:100%;height:100%;border-radius:50%;background:white;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.pom-inner>span{color:#526185;font-size:14px;font-weight:800}
+.pom-inner>strong{font-size:clamp(46px,10vw,60px);line-height:1.2;font-weight:850;letter-spacing:-2px;font-variant-numeric:tabular-nums}
+.pom-inner>small{color:#71809b;font-size:12px;font-weight:750}
+.pom-summary{display:flex;justify-content:space-between;align-items:center;gap:12px;border-radius:12px;background:#f5f7ff;padding:12px 15px;margin:12px 0}
+.pom-summary span{font-size:12px;color:#63708c}
+.pom-summary strong{font-size:17px;font-variant-numeric:tabular-nums}
+.pom-controls button{flex:1 1 135px;min-height:45px}
+#pom-panel .extra-muted{line-height:1.65;margin-bottom:0}
+@media(max-width:420px){.pom-setup{gap:7px}.pom-setup .extra-field>span{font-size:10px}.pom-setup input{padding:8px;font-size:15px}.pom-options{gap:8px 11px}.pom-options label{font-size:11px}.pom-controls button{flex:1 1 calc(50% - 9px)}}
