@@ -139,6 +139,7 @@
   @media(max-width:370px){.brand{font-size:15px}.hero-number{font-size:41px}.stat .v{font-size:18px}.day .dh{font-size:8px}.form-grid{grid-template-columns:1fr 1fr}.form-inline{grid-template-columns:minmax(0,1fr) 75px auto}.form-inline .primary{padding:11px 8px;font-size:12px}}
   @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
 </style>
+<link rel="stylesheet" href="./extras.css?v=7">
 </head>
 <body>
 <header>
@@ -261,7 +262,7 @@ const DATES=dateRange();
 const dowArr=['日','月','火','水','木','金','土'];
 const isHoliday=d=>HOLIDAYS.includes(d);
 const isOff=d=>{const w=parseDate(d).getDay();return w===0||w===6||isHoliday(d)};
-const dayGoal=d=>isOff(d)?480:240;
+const dayGoal=d=>window.studylogDayGoal?window.studylogDayGoal(d):(isOff(d)?480:240);
 const dateLabel=d=>{const z=parseDate(d);return (z.getMonth()+1)+'月'+z.getDate()+'日（'+dowArr[z.getDay()]+'）'};
 const safeNum=(v,min,max)=>Number.isFinite(Number(v))&&Number(v)>=min&&Number(v)<=max;
 const makeDefault=()=>({version:1,goals:Object.fromEntries(SUBJECTS.map((name,i)=>[name,mins(DEFAULT_GOALS[i])])),total:mins(168),logs:[],plans:[]});
@@ -328,7 +329,7 @@ function renderCalendar(){
 function logHTML(x){return `<div class="log-row"><div><div class="log-name">${esc(x.subject==='予備'?'その他・予備時間':x.subject)}</div><div class="log-meta">${dateLabel(x.date)}</div></div><div class="row"><span class="log-time">${fmt(x.minutes)}</span><button type="button" class="danger" data-delete-log="${esc(x.id)}">削除</button></div></div>`}
 function renderHistory(){const rows=state.logs.slice().sort((a,b)=>b.date.localeCompare(a.date)||b.createdAt.localeCompare(a.createdAt));$('all-logs').innerHTML=rows.length?rows.map(logHTML).join(''):'<div class="empty">記録はまだありません。<br>ホームの「勉強時間を記録」から始めよう。</div>';$('history-summary').textContent=rows.length+'件 ・ '+fmt(sumLogs())}
 function renderSettings(){ $('target-total').value=state.total/60;$('target-fields').innerHTML=SUBJECTS.filter(n=>n!=='予備').map(n=>`<label class="field"><span class="field-label">${n}</span><input class="input" type="number" name="goal" data-goal="${n}" min="0" max="999" step="0.25" value="${state.goals[n]/60}" required></label>`).join('')+`<div class="field"><span class="field-label">その他・予備時間</span><div class="input" style="display:flex;align-items:center;background:#f2f6ff;font-weight:850" id="reserve-display">${fmt(state.goals['予備'])}</div></div>` }
-function render(){renderSummary();renderSubjects();renderCalendar();renderHistory();if(activeTab==='settings')renderSettings()}
+function render(){renderSummary();renderSubjects();renderCalendar();renderHistory();if(activeTab==='settings')renderSettings();window.studylogRefresh?.()}
 function switchTab(tab){activeTab=tab;document.querySelectorAll('.tab').forEach(el=>{const act=el.dataset.tab===tab;el.classList.toggle('active',act);el.setAttribute('aria-current',act?'page':'false')});['home','calendar','history','settings'].forEach(name=>$('page-'+name).classList.toggle('hidden',name!==tab));if(tab==='settings')renderSettings();if(tab==='calendar')renderCalendar();window.scrollTo({top:0,behavior:'smooth'})}
 function addLog(date,subject,minutes){if(!DATES.includes(date)||!SUBJECTS.includes(subject)||!safeNum(minutes,1,1440)){toast('日付・科目・時間を確認してね');return false}state.logs.push({id:uid(),date,subject,minutes:Number(minutes),createdAt:new Date().toISOString()});save();return true}
 function bind(){
@@ -349,14 +350,17 @@ function bind(){
  $('settings-form').addEventListener('submit',e=>{e.preventDefault();const total=Number($('target-total').value);const inputs=[...document.querySelectorAll('[data-goal]')];const values=inputs.map(input=>Number(input.value));if(!safeNum(total,1,999)||!values.every(v=>safeNum(v,0,999))){toast('目標時間を確認してね');return}const target=mins(total),sum=values.reduce((a,v)=>a+mins(v),0);if(sum>target){toast('12科目の合計が総目標時間を超えています');return}const goals={};inputs.forEach((input,i)=>goals[input.dataset.goal]=mins(values[i]));goals['予備']=target-sum;state.total=target;state.goals=goals;save();toast('目標時間を更新しました')});
  $('reset-targets').addEventListener('click',()=>{if(!confirm('科目別の目標時間を初期配分に戻しますか？\n勉強記録や予定はそのまま残ります。'))return;const d=makeDefault();state.goals=d.goals;state.total=d.total;save();toast('目標時間を戻しました')});
  $('export-data').addEventListener('click',()=>{const content=JSON.stringify({...state,exportedAt:new Date().toISOString()},null,2);const file=new Blob([content],{type:'application/json'});const link=document.createElement('a');const url=URL.createObjectURL(file);link.href=url;link.download='study-log-backup-'+todayISO()+'.json';document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('バックアップを書き出しました')});
- $('import-data').addEventListener('change',async e=>{const file=e.target.files&&e.target.files[0];if(!file)return;try{if(file.size>4000000)throw Error('ファイルが大きすぎます');const text=await file.text();const next=validate(JSON.parse(text));if(!confirm('現在の予定・記録をバックアップの内容で置き換えますか？'))return;state=next;save();toast('バックアップを復元しました')}catch(error){toast('復元できません：'+error.message)}finally{e.target.value=''}});
- $('clear-data').addEventListener('click',()=>{if(!confirm('勉強記録と予定をすべて削除しますか？\nこの操作は取り消せません。'))return;if(!confirm('最終確認：本当に全データを初期化しますか？'))return;state=makeDefault();save();toast('すべて初期化しました')});
+ $('import-data').addEventListener('change',async e=>{const file=e.target.files&&e.target.files[0];if(!file)return;try{if(file.size>4000000)throw Error('ファイルが大きすぎます');const text=await file.text();const imported=JSON.parse(text);const next=validate(imported.core||imported);if(!confirm('現在の予定・記録をバックアップの内容で置き換えますか？'))return;state=next;if(imported.features)window.studylogFeatures?.restore(imported.features);save();toast('バックアップを復元しました')}catch(error){toast('復元できません：'+error.message)}finally{e.target.value=''}});
+ $('clear-data').addEventListener('click',()=>{if(!confirm('勉強記録と予定をすべて削除しますか？\nこの操作は取り消せません。'))return;if(!confirm('最終確認：本当に全データを初期化しますか？'))return;state=makeDefault();window.studylogFeatures?.reset();save();toast('すべて初期化しました')});
  $('settings-form').addEventListener('input',e=>{if(e.target.id==='target-total'||e.target.matches('[data-goal]')){const total=Number($('target-total').value)||0;const sum=[...document.querySelectorAll('[data-goal]')].reduce((a,x)=>a+Number(x.value||0),0);$('reserve-display').textContent=total>=sum?fmt(mins(total-sum)):'超過 '+fmt(mins(sum-total))}});
  }
 function syncDuration(){const v=Number($('record-minutes').value);$('duration-label').textContent=Number.isFinite(v)&&v>0?fmt(v):'—';document.querySelectorAll('[data-min]').forEach(c=>c.classList.toggle('active',Number(c.dataset.min)===v))}
+window.studylogBridge={getState:()=>state,setState:obj=>{state=validate(obj);save()},save,render,toast,addLog:(d,s,m)=>{const before=state.logs.length;return addLog(d,s,m)&&state.logs.length>before?state.logs[state.logs.length-1].id:null},SUBJECTS,DATES,getSelectedDate:()=>selected,todayISO,fmt};
 createSelects();$('record-date').value=selected;bind();render();syncDuration();
 if('serviceWorker' in navigator&&location.protocol.startsWith('http')){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
 })();
 </script>
+<script src="./features-core.js?v=7"></script>
+<script src="./features-ui.js?v=7"></script>
 </body>
 </html>
