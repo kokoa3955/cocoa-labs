@@ -1,4 +1,4 @@
-(()=>{'use strict';const X=window.studyExtras;if(!X)return;const C=X.C, el=id=>document.getElementById(id);
+(()=>{'use strict';const X=window.studyExtras;if(!X)return;const C=X.C, el=id=>document.getElementById(id);window.ExtraRender=window.ExtraRender||{};
 const opts=(value='物理')=>C.SUBJECTS.map(s=>'<option '+(s===value?'selected ':'')+'value="'+X.html(s)+'">'+X.html(s==='予備'?'その他・予備':s)+'</option>').join('');
 const but=(id,text,cls='secondary')=>'<button type="button" id="'+id+'" class="'+cls+'">'+text+'</button>';
 const field=(id,label,type='text',value='')=>'<label class="extra-field"><span>'+label+'</span><input id="'+id+'" type="'+type+'" value="'+X.html(value)+'"></label>';
