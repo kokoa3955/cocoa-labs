@@ -300,7 +300,7 @@ function renderSummary(){
  $('today-done').textContent=fmt(td);$('today-target').textContent='/ '+fmt(dailyTarget);
  $('today-remaining').innerHTML=isWithin?`${fmt(remaining(dailyTarget,td))} <small>残り</small>`:`<small>対象期間外</small>`;
  $('today-type').textContent=!isWithin?'期間外':isHoliday(t)?'祝日':isOff(t)?'土日':'平日';
- $('today-date-text').textContent=isWithin?dateLabel(t)+' ｜ '+(isOff(t)?'8時間':'4時間')+'目標':'10/27〜11/27の計画です';
+ $('today-date-text').textContent=isWithin?dateLabel(t)+' ｜ '+fmt(dailyTarget)+'目標':'10/27〜11/27の計画です';
  $('today-completed-label').textContent='完了 '+fmt(td);$('today-goal-label').textContent='目標 '+fmt(dailyTarget);
  $('today-bar').style.width=(isWithin?percent(dailyTarget,td):0)+'%';
  $('save-label').textContent=storageAvailable?'自動保存 ON':'保存できません';
@@ -318,7 +318,7 @@ function renderCalendar(){
  for(let i=0;i<7;i++){const d=DATES[start+i];if(!d){days.push('<span class="day invalid"></span>');continue}const done=byDate(d),goal=dayGoal(d),n=parseDate(d);days.push(`<button class="day ${selected===d?'selected':''} ${isOff(d)?'off':''} ${d===todayISO()?'today':''}" type="button" data-select-date="${d}" aria-label="${dateLabel(d)}：残り${fmt(remaining(goal,done))}"><span class="dow">${dowArr[n.getDay()]}</span><span class="dd">${n.getDate()}</span><span class="dh">${fmt(done)}/${fmt(goal)}</span><span class="track"><span class="remaining" style="display:block;width:${percent(goal,done)}%"></span></span></button>`)}
  $('week-days').innerHTML=days.join('');$('week-label').textContent=dateLabel(slice[0]).split('（')[0]+' 〜 '+dateLabel(slice[slice.length-1]).split('（')[0];
  $('prev-week').disabled=weekIndex===0;$('next-week').disabled=(weekIndex+1)*7>=DATES.length;
- $('selected-date-label').textContent=dateLabel(selected);$('selected-day-type').textContent=isHoliday(selected)?'祝日・8時間目標':isOff(selected)?'土日・8時間目標':'平日・4時間目標';
+ $('selected-date-label').textContent=dateLabel(selected);$('selected-day-type').textContent=(isHoliday(selected)?'祝日':isOff(selected)?'土日':'平日')+'・'+fmt(dayGoal(selected))+'目標';
  const goal=dayGoal(selected),done=byDate(selected);
  $('selected-day-progress').textContent=fmt(done)+' / '+fmt(goal);$('selected-day-bar').style.width=percent(goal,done)+'%';$('selected-day-done').textContent='完了 '+fmt(done);$('selected-day-remaining').textContent='残り '+fmt(remaining(goal,done));
  const plans=state.plans.filter(x=>x.date===selected);
