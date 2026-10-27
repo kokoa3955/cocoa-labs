@@ -29,3 +29,5 @@ const clockMs=()=>Math.max(0,s.timer.elapsed+(s.timer.running?Date.now()-s.timer
 function timerStart(subject,note){const t=s.timer;if(t.running)return;if(!t.elapsed){t.subject=subject;t.note=note;t.date=today()}t.start=Date.now();t.running=true;persist()}
 function timerPause(){const t=s.timer;if(!t.running)return;t.elapsed=clockMs();t.running=false;t.start=0;persist()}
 function timerReset(){s.timer=defaults().timer;persist()}
+function timerFinish(){const t=s.timer,m=Math.round(clockMs()/60000);if(m<1||m>1440){C.toast('1分〜24時間で記録してください');return}if(!C.DATES.includes(t.date)){C.toast('テスト期間外のため手動で記録してください');return}const id=C.addLog(t.date,t.subject,m);if(!id)return;if(t.note)s.notes[id]=t.note;s.timer=defaults().timer;persist();C.toast(fmt(m)+'を記録しました')}
+function streak(){let longest=0,run=0;for(const d of C.DATES){if(dayGoal(d)>0&&inDay(d)>=dayGoal(d)){run++;longest=Math.max(longest,run)}else run=0}return longest}
