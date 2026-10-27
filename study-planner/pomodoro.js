@@ -20,7 +20,7 @@ function loadData(obj){
  phaseDate:C.DATES.includes(obj.phaseDate)?obj.phaseDate:'',savedMinutes:Math.max(0,Number(obj.savedMinutes)||0),
  started:!!obj.started};
 }
-try{s=loadData(JSON.parse(localStorage.getItem(KEY)||'null'))}catch(e){}
+try{s=loadData(JSON.parse(localStorage.getItem(KEY)||'null'));wasBackgrounded=s.running}catch(e){}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){C.toast('タイマーの保存に失敗しました')}X.backupSoon()}
 function phaseDuration(){return (s.phase==='break'?s.rest:s.work)*60000}
 function remain(){return s.running?Math.max(0,s.endAt-Date.now()):s.remainingMs}
@@ -30,9 +30,9 @@ function requestSoundUnlock(){if(!s.sound)return;try{const T=window.AudioContext
 function beep(){if(!s.sound)return;try{requestSoundUnlock();if(!soundContext||soundContext.state!=='running')return;const now=soundContext.currentTime;for(let i=0;i<2;i++){const osc=soundContext.createOscillator(),gain=soundContext.createGain();osc.type='sine';osc.frequency.value=i===0?660:880;gain.gain.setValueAtTime(.0001,now+i*.27);gain.gain.exponentialRampToValueAtTime(.12,now+i*.27+.02);gain.gain.exponentialRampToValueAtTime(.0001,now+i*.27+.2);osc.connect(gain);gain.connect(soundContext.destination);osc.start(now+i*.27);osc.stop(now+i*.27+.22)}}catch(e){}}
 function notify(title,body){beep();try{if('Notification' in window&&Notification.permission==='granted')new Notification(title,{body,tag:'studylog-pomodoro'})}catch(e){}}
 function setSavedMinutes(n){s.savedMinutes+=n}
-function addStudy(minutes){
+function addStudy(minutes,date){
  if(minutes<1)return;
- let chosen=s.phaseDate||dateNow();
+ let chosen=date||s.phaseDate||dateNow();
  if(!C.DATES.includes(chosen)){C.toast('テスト期間外なので記録に加算できません');return}
  const id=C.addLog(chosen,s.subject,minutes);
  if(id&&s.note){X.s.notes[id]=s.note;X.persist()}
@@ -47,7 +47,7 @@ function finishFocus(complete,hidden){
  s.phase=isLast?'done':'break';s.remainingMs=isLast?0:s.rest*60000;
  s.endAt=0;s.running=false;
  s.phaseDate='';persist();
- addStudy(studied);
+ addStudy(studied,ended);
  if(isLast){notify('ポモドーロ完了','設定した勉強回数が終了しました。');C.toast('ポモドーロ完了！');render();return}
  notify('勉強終了','休憩を始めましょう');
  if(s.auto&&!hidden){s.running=true;s.endAt=Date.now()+s.remainingMs}
@@ -182,7 +182,7 @@ $('pom-note').addEventListener('change',saveSettings);
 setInterval(tick,1000);
 document.addEventListener('visibilitychange',()=>{
  if(document.hidden){wasBackgrounded=true;persist()}
- else tick();
+ else {if(s.running&&s.endAt>Date.now())wasBackgrounded=false;tick()}
 });
 window.addEventListener('pageshow',tick);
 window.addEventListener('pagehide',()=>{wasBackgrounded=true;persist()});
