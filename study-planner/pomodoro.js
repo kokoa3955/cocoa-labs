@@ -71,6 +71,8 @@ function tick(){
  else{s.running=false;persist();render()}
 }
 function begin(){
+ // Apply any edits made with the iPhone number keypad before starting.
+ if(!s.started&&saveSettings(false)===false)return;
  if(s.phase==='done'){s.phase='focus';s.completed=0;s.remainingMs=s.work*60000;s.started=false;s.savedMinutes=0}
  if(s.running)return;
  if(s.phase==='focus'&&!s.phaseDate)s.phaseDate=dateNow();
@@ -132,18 +134,21 @@ function render(){
  $('pom-auto').checked=s.auto;$('pom-sound').checked=s.sound;
  $('pom-infinite').checked=s.infinite;
  $('pom-note').value=document.activeElement===$('pom-note')?$('pom-note').value:s.note;
- $('pom-work').value=String(s.work);$('pom-rest').value=String(s.rest);$('pom-loops').value=String(s.loops);
+ // Preserve the focused input while Safari's numeric keyboard is open.
+ for(const [id,value] of [['pom-work',s.work],['pom-rest',s.rest],['pom-loops',s.loops]]){
+  const input=$(id);if(document.activeElement!==input)input.value=String(value);
+ }
  if($('pom-subject').value!==s.subject)$('pom-subject').value=s.subject;
  $('pom-alert').textContent=('Notification' in window)&&Notification.permission==='granted'?'通知：許可済み':'通知を許可';
 }
-function saveSettings(){
- if(s.started&&s.phase!=='done')return;
+function saveSettings(showToast=false){
+ if(s.started&&s.phase!=='done'){if(showToast)C.toast('変更するにはタイマーを終了してください');return false}
  const work=limits($('pom-work').value,1,180,NaN),rest=limits($('pom-rest').value,1,60,NaN),loops=limits($('pom-loops').value,1,20,NaN);
- if(!Number.isFinite(work)||!Number.isFinite(rest)||(!s.infinite&&!Number.isFinite(loops))){C.toast('時間と回数の範囲を確認してください');render();return}
+ if(!Number.isFinite(work)||!Number.isFinite(rest)||(!s.infinite&&!Number.isFinite(loops))){C.toast('勉強1〜180分、休憩1〜60分、ループ1〜20回で入力してください');render();return false}
  s.work=work;s.rest=rest;s.loops=Number.isFinite(loops)?loops:s.loops;
  s.phase='focus';s.remainingMs=s.work*60000;s.completed=0;s.started=false;s.endAt=0;s.running=false;s.savedMinutes=0;
  s.subject=$('pom-subject').value;s.note=$('pom-note').value.slice(0,500);
- persist();render();
+ persist();render();if(showToast)C.toast('勉強・休憩時間を保存しました');return true;
 }
 function setBoolean(which,value){
  s[which]=value;
@@ -174,8 +179,9 @@ $('pom-pause').addEventListener('click',pause);
 $('pom-stop').addEventListener('click',endSession);
 $('pom-skip').addEventListener('click',skip);
 $('pom-reset').addEventListener('click',reset);
+ $('pom-apply').addEventListener('click',()=>saveSettings(true));
 $('pom-alert').addEventListener('click',permission);
-['pom-work','pom-rest','pom-loops'].forEach(id=>$(id).addEventListener('change',saveSettings));
+['pom-work','pom-rest','pom-loops'].forEach(id=>$(id).addEventListener('change',()=>saveSettings(false)));
 $('pom-subject').addEventListener('change',saveSettings);
 $('pom-note').addEventListener('change',saveSettings);
 ['pom-infinite','pom-auto','pom-sound'].forEach(id=>$(id).addEventListener('change',e=>setBoolean(id.slice(4),e.target.checked)));
