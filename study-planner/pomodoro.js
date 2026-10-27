@@ -182,8 +182,8 @@ $('pom-reset').addEventListener('click',reset);
  $('pom-apply').addEventListener('click',()=>saveSettings(true));
 $('pom-alert').addEventListener('click',permission);
 ['pom-work','pom-rest','pom-loops'].forEach(id=>$(id).addEventListener('change',()=>saveSettings(false)));
-$('pom-subject').addEventListener('change',saveSettings);
-$('pom-note').addEventListener('change',saveSettings);
+$('pom-subject').addEventListener('change',()=>saveSettings(false));
+$('pom-note').addEventListener('change',()=>saveSettings(false));
 ['pom-infinite','pom-auto','pom-sound'].forEach(id=>$(id).addEventListener('change',e=>setBoolean(id.slice(4),e.target.checked)));
 setInterval(tick,1000);
 document.addEventListener('visibilitychange',()=>{
