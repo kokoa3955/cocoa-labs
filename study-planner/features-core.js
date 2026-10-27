@@ -17,3 +17,15 @@ const future=()=>C.DATES.filter(d=>d>=today());
 const forecast=()=>{const days=future(),left=Math.max(0,C.getState().total-total()),weight=days.reduce((a,d)=>a+Math.max(1,dayGoal(d)),0);return {days,left,mean:days.length?Math.ceil(left/days.length/5)*5:0,ratio:weight?left/weight:0}};
 const html=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let backupTimer=null,dbInstance=null;
+const snapshot=()=>({version:2,savedAt:new Date().toISOString(),core:C.getState(),features:s});
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){C.toast('データ保存に失敗しました')}backupSoon();window.studylogRefresh?.()}
+function backupSoon(){clearTimeout(backupTimer);backupTimer=setTimeout(autoBackup,1200)}
+async function openDB(){if(dbInstance)return dbInstance;dbInstance=await new Promise((ok,no)=>{const req=indexedDB.open(DB,1);req.onupgradeneeded=()=>req.result.createObjectStore('snapshots');req.onsuccess=()=>ok(req.result);req.onerror=()=>no(req.error)});return dbInstance}
+async function autoBackup(){try{const db=await openDB(),b=snapshot(),tx=db.transaction('snapshots','readwrite');tx.objectStore('snapshots').put(b,'latest');s.lastBackup=b.savedAt;localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}}
+async function restoreBackup(){try{const db=await openDB();const b=await new Promise((ok,no)=>{const q=db.transaction('snapshots').objectStore('snapshots').get('latest');q.onsuccess=()=>ok(q.result);q.onerror=()=>no(q.error)});if(!b){C.toast('バックアップが見つかりません');return}if(!confirm('端末内バックアップで現在の記録を置き換えますか？'))return;restore(b.features);C.setState(b.core);C.toast('バックアップを復元しました')}catch(e){C.toast('復元に失敗しました')}}
+function restore(v){if(!v||typeof v!=='object')return;s=Object.assign(defaults(),v,{version:2});s.timer=Object.assign(defaults().timer,s.timer||{});s.notes=s.notes||{};s.overrides=s.overrides||{};persist()}
+function reset(){s=defaults();persist()}
+const clockMs=()=>Math.max(0,s.timer.elapsed+(s.timer.running?Date.now()-s.timer.start:0));
+function timerStart(subject,note){const t=s.timer;if(t.running)return;if(!t.elapsed){t.subject=subject;t.note=note;t.date=today()}t.start=Date.now();t.running=true;persist()}
+function timerPause(){const t=s.timer;if(!t.running)return;t.elapsed=clockMs();t.running=false;t.start=0;persist()}
+function timerReset(){s.timer=defaults().timer;persist()}
