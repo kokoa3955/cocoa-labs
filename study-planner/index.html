@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#f7f9ff" />
-  <meta name="description" content="11月28日のテストまで。毎日の科目を自由に選び、勉強した時間だけ残り時間が減る学習記録アプリ。" />
+  <meta name="description" content="11月29日まで。毎日の科目を自由に選び、勉強した時間だけ残り時間が減る学習記録アプリ。" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="勉強ログ" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="apple-touch-icon" href="./icon.svg" />
-  <title>勉強ログ | 11/28 テストまで</title>
+  <title>勉強ログ | 11/29まで</title>
 <style>
   :root {color-scheme:light;--ink:#17223d;--muted:#71809b;--blue:#4965ea;--blue-lite:#ecf0ff;--mint:#21a894;--mint-lite:#e6f7f2;--orange:#fa9b56;--line:#e7eaf2;--surface:#ffffff;--bg:#f7f9fd;--shadow:0 16px 44px rgba(36,50,92,.055);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;font-synthesis:none}
   * {box-sizing:border-box}
@@ -160,7 +160,7 @@
   <section id="page-home">
     <div class="hero">
       <div class="hero-grid">
-        <div><div class="eyebrow">テストまでの残り勉強時間</div><div class="hero-number" id="overall-remaining">168<span>時間</span></div><p class="hero-sub">勉強した分だけ、下のバーが短くなるよ。</p></div>
+        <div><div class="eyebrow">目標までの残り勉強時間</div><div class="hero-number" id="overall-remaining">168<span>時間</span></div><p class="hero-sub">勉強した分だけ、下のバーが短くなるよ。</p></div>
         <div class="countdown"><strong id="count-days">32</strong><span id="days-caption">勉強できる日</span></div>
       </div>
       <div class="track" role="progressbar" aria-label="全体の残り勉強時間" id="overall-track"><div class="remaining" id="overall-bar"></div></div>
@@ -177,7 +177,7 @@
         <form id="record-form">
           <div class="form-grid">
             <label class="field"><span class="field-label">科目</span><select class="input" id="record-subject" required></select></label>
-            <label class="field"><span class="field-label">勉強した日</span><input class="input" type="date" id="record-date" min="2026-10-27" max="2026-11-27" required /></label>
+            <label class="field"><span class="field-label">勉強した日</span><input class="input" type="date" id="record-date" min="2026-10-27" max="2026-11-29" required /></label>
           </div>
           <div class="field" style="margin-top:14px"><span class="field-label">勉強した時間（分）</span><div class="time-input"><input class="input" type="number" id="record-minutes" min="1" max="1440" step="1" value="60" inputmode="numeric" required style="max-width:150px"/><span>分 ＝ <b id="duration-label">1時間</b></span></div></div>
           <div class="chips" id="quick-minutes"><button type="button" class="chip" data-min="15">15分</button><button type="button" class="chip" data-min="30">30分</button><button type="button" class="chip active" data-min="60">1時間</button><button type="button" class="chip" data-min="90">1.5時間</button><button type="button" class="chip" data-min="120">2時間</button></div>
@@ -239,13 +239,13 @@
       <div class="settings-foot" style="padding-top:13px;border-top:1px solid var(--line);margin-top:23px"><button type="button" class="danger" id="clear-data">すべての記録・予定を初期化</button></div>
     </section>
   </section>
-  <footer class="footer">2026年11月28日のテストに向けた勉強ログ · 保存先はこのブラウザ</footer>
+  <footer class="footer">2026年11月29日までの勉強ログ · 保存先はこのブラウザ</footer>
 </main>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){'use strict';
 const STORAGE_KEY='studylog-nov28-2026-v1';
-const START='2026-10-27',END='2026-11-27',EXAM='2026-11-28';
+const START='2026-10-27',END='2026-11-29',EXAM='2026-11-28';
 const HOLIDAYS=['2026-11-03','2026-11-23'];
 const SUBJECTS=['物理','微分積分','化学','論理回路','情報数学','線形代数','プログラミング','英文法','国語(現)','国語(言)','英語(R)','英語(W)','予備'];
 const DEFAULT_GOALS=[25,25,24,20,16,10,10,6,3,3,2,2,22]; // sum 168
@@ -300,11 +300,11 @@ function renderSummary(){
  $('today-done').textContent=fmt(td);$('today-target').textContent='/ '+fmt(dailyTarget);
  $('today-remaining').innerHTML=isWithin?`${fmt(remaining(dailyTarget,td))} <small>残り</small>`:`<small>対象期間外</small>`;
  $('today-type').textContent=!isWithin?'期間外':isHoliday(t)?'祝日':isOff(t)?'土日':'平日';
- $('today-date-text').textContent=isWithin?dateLabel(t)+' ｜ '+fmt(dailyTarget)+'目標':'10/27〜11/27の計画です';
+ $('today-date-text').textContent=isWithin?dateLabel(t)+' ｜ '+fmt(dailyTarget)+'目標':'10/27〜11/29の計画です';
  $('today-completed-label').textContent='完了 '+fmt(td);$('today-goal-label').textContent='目標 '+fmt(dailyTarget);
  $('today-bar').style.width=(isWithin?percent(dailyTarget,td):0)+'%';
  $('save-label').textContent=storageAvailable?'自動保存 ON':'保存できません';
- const date=todayISO();const remainDays=DATES.filter(d=>d>=date).length;$('count-days').textContent=remainDays;$('days-caption').textContent=date>=EXAM?'テスト当日以降':'勉強できる日';
+ const date=todayISO();const remainDays=DATES.filter(d=>d>=date).length;$('count-days').textContent=remainDays;$('days-caption').textContent=date>END?'計画期間終了':'勉強できる日';
 }
 function renderSubjects(){
  $('subject-grid').innerHTML=SUBJECTS.map(name=>{
